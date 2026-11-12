@@ -182,6 +182,8 @@ $upi_id = get_setting('upi_id', 'ironclad@upi');
 $upi_merchant = get_setting('upi_merchant_name', 'IRONCLAD GAMING SANCTUARY');
 $upi_qr_img = get_setting('upi_qr_image', 'images/sample_qr.svg');
 $payment_instructions = get_setting('payment_instructions', 'Scan the UPI QR code using any UPI app. Enter the exact total amount. After completing payment, submit your 12-digit transaction ID below.');
+$rzp_enabled = is_razorpay_enabled();
+$rzp_key_id = get_razorpay_key_id();
 
 // All active stations for station change request
 $all_stations = $db->query("SELECT id, name, code, hourly_rate FROM stations WHERE status = 'active' ORDER BY display_order ASC")->fetchAll();
@@ -358,85 +360,185 @@ require_once __DIR__ . '/includes/header.php';
           </div>
         </div>
 
-        <!-- Right Column: UPI Payment Scanner & Submission -->
+        <!-- Right Column: Online Razorpay Payment & Manual UPI Fallback -->
         <div class="col-lg-6">
           <div class="iron-card p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h4 class="text-gold brand-font mb-0">UPI Payment Verification</h4>
+              <h4 class="text-gold brand-font mb-0">Payment & Verification</h4>
               <?php if ($payment): ?>
                 <?= payment_status_badge($payment['status']) ?>
               <?php else: ?>
-                <span class="badge bg-warning text-dark">Payment Required</span>
+                <span class="badge bg-warning text-dark"><i class="bi bi-clock me-1"></i>Payment Required</span>
               <?php endif; ?>
             </div>
 
-            <!-- If Verified -->
+            <!-- 1. If Already Verified -->
             <?php if ($payment && $payment['status'] === 'verified'): ?>
-              <div class="alert alert-success py-3 px-4 mb-4">
-                <div class="d-flex align-items-center gap-2">
-                  <i class="bi bi-check-circle-fill fs-3 text-success"></i>
+              <div class="alert alert-success py-3 px-4 mb-4 border border-success border-opacity-50" style="background: rgba(46, 204, 113, 0.12); color: #fff;">
+                <div class="d-flex align-items-center gap-3">
+                  <i class="bi bi-check-circle-fill fs-2 text-success"></i>
                   <div>
-                    <h5 class="alert-heading fs-6 fw-bold mb-1">Payment Successfully Verified!</h5>
-                    <p class="mb-0 small">Your seat is locked and confirmed. We look forward to seeing you at <?= e($brand_name) ?>.</p>
+                    <h5 class="alert-heading fs-6 fw-bold mb-1 text-green">Payment Successfully Verified & Locked!</h5>
+                    <p class="mb-0 small text-light opacity-75">
+                      Your battle station is confirmed and locked. Present your 1-page pass upon counter arrival.
+                    </p>
                   </div>
                 </div>
               </div>
-            <?php elseif ($payment && $payment['status'] === 'rejected'): ?>
-              <div class="alert alert-danger py-3 px-4 mb-4">
-                <h5 class="alert-heading fs-6 fw-bold mb-1"><i class="bi bi-x-octagon-fill me-2"></i>Payment Rejected by Admin</h5>
-                <p class="mb-0 small">
-                  <?= e($payment['admin_notes'] ?? 'The submitted transaction ID could not be matched. Please re-check and resubmit your valid UPI UTR.') ?>
-                </p>
-              </div>
-            <?php endif; ?>
 
-            <!-- QR Code Box -->
-            <div class="text-center p-3 rounded mb-3" style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-color);">
-              <p class="text-muted-iron small mb-2">Scan & Pay using any UPI App (GPay, PhonePe, Paytm, BHIM):</p>
-              
-              <div class="d-inline-block p-2 bg-dark rounded-3 border border-secondary border-opacity-50 my-2" style="max-width: 260px;">
-                <img src="<?= BASE_URL . e($upi_qr_img) ?>" alt="<?= e($brand_short) ?> UPI QR" class="img-fluid rounded" style="max-height: 240px; width: 100%; object-fit: contain;">
-              </div>
-
-              <div class="mt-2">
-                <span class="text-muted-iron small d-block">UPI Payee ID:</span>
-                <strong class="text-gold font-monospace fs-6"><?= e($upi_id) ?></strong>
-                <span class="text-muted-iron small d-block mt-1">Merchant: <strong><?= e($upi_merchant) ?></strong></span>
-                <span class="badge bg-gold text-dark fs-6 mt-2">Exact Amount: <?= format_currency($booking['final_amount']) ?></span>
-              </div>
-            </div>
-
-            <!-- UTR Submission Form -->
-            <?php if (!$payment || $payment['status'] !== 'verified'): ?>
-              <form method="POST" action="<?= BASE_URL ?>check-booking.php?ref=<?= urlencode($booking['booking_ref']) ?>" enctype="multipart/form-data" class="mt-3">
-                <?= csrf_field() ?>
-                <input type="hidden" name="booking_ref" value="<?= e($booking['booking_ref']) ?>">
-                <input type="hidden" name="phone" value="<?= e($booking['customer_phone']) ?>">
-                <input type="hidden" name="submit_payment" value="1">
-
-                <div class="mb-3">
-                  <label for="upiUtr" class="form-label">
-                    12-Digit UPI Transaction ID / UTR <span class="text-danger">*</span>
-                  </label>
-                  <input type="text" name="upi_transaction_id" id="upiUtr" class="form-control font-monospace" placeholder="e.g. 431289012345" value="<?= e($payment['upi_transaction_id'] ?? '') ?>" required>
-                  <div class="form-text text-muted-iron small">Available in your GPay / PhonePe / Paytm receipt screen.</div>
+              <div class="p-3 rounded mb-4" style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-color);">
+                <div class="d-flex justify-content-between small text-muted-iron mb-2">
+                  <span>Payment Gateway / Channel:</span>
+                  <strong class="text-uppercase text-light">
+                    <?php if (($payment['payment_method'] ?? '') === 'razorpay'): ?>
+                      <span class="badge bg-primary" style="background: #3399cc !important;"><i class="bi bi-lightning-charge-fill me-1"></i>Razorpay Online Gateway</span>
+                    <?php else: ?>
+                      <?= e($payment['payment_method'] ?? 'Manual UPI / Cash') ?>
+                    <?php endif; ?>
+                  </strong>
                 </div>
-
-                <div class="mb-4">
-                  <label for="proofFile" class="form-label">Upload Payment Screenshot Proof (Optional)</label>
-                  <input type="file" name="proof_file" id="proofFile" class="form-control" accept="image/jpeg,image/png,image/webp">
-                  <div class="form-text text-muted-iron small">Accepted formats: JPG, PNG, WEBP (Max 5MB).</div>
+                <div class="d-flex justify-content-between small text-muted-iron mb-2">
+                  <span>Transaction ID / Ref:</span>
+                  <strong class="text-gold font-monospace"><?= e($payment['upi_transaction_id'] ?? $payment['razorpay_payment_id'] ?? 'N/A') ?></strong>
                 </div>
+                <div class="d-flex justify-content-between small text-muted-iron">
+                  <span>Verified Timestamp:</span>
+                  <strong class="text-light"><?= !empty($payment['verified_at']) ? date('d M Y, h:i A', strtotime($payment['verified_at'])) : 'Verified' ?></strong>
+                </div>
+              </div>
 
-                <button type="submit" class="btn btn-iron btn-iron-primary w-100 py-3">
-                  <i class="bi bi-shield-check me-1"></i> Submit Transaction For Verification
-                </button>
-              </form>
+              <div class="d-grid gap-2">
+                <a href="<?= BASE_URL ?>receipt.php?ref=<?= urlencode($booking['booking_ref']) ?>&download=pdf" target="_blank" class="btn btn-danger py-2 fw-bold shadow-sm">
+                  <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download Verified 1-Page PDF Pass
+                </a>
+                <a href="<?= BASE_URL ?>receipt.php?ref=<?= urlencode($booking['booking_ref']) ?>&phone=<?= urlencode($booking['customer_phone']) ?>" target="_blank" class="btn btn-iron btn-iron-cyan py-2">
+                  <i class="bi bi-receipt-cutoff me-1"></i> Open Live Digital Receipt & QR Pass
+                </a>
+              </div>
+
             <?php else: ?>
-              <div class="text-center p-3 text-muted-iron small">
-                <i class="bi bi-check2-all text-success fs-5 me-1"></i>
-                Transaction ID: <span class="text-light font-monospace"><?= e($payment['upi_transaction_id']) ?></span>
+
+              <!-- If Rejected Previously -->
+              <?php if ($payment && $payment['status'] === 'rejected'): ?>
+                <div class="alert alert-danger py-3 px-4 mb-4 border border-danger">
+                  <h5 class="alert-heading fs-6 fw-bold mb-1"><i class="bi bi-x-octagon-fill me-2"></i>Payment Rejected by Counter</h5>
+                  <p class="mb-0 small">
+                    <?= e($payment['admin_notes'] ?? 'The submitted transaction details could not be verified. Please pay via Razorpay or resubmit your valid UPI UTR.') ?>
+                  </p>
+                </div>
+              <?php endif; ?>
+
+              <!-- ==============================================
+                   OPTION A: RAZORPAY INSTANT ONLINE CHECKOUT
+                   ============================================== -->
+              <?php if ($rzp_enabled): ?>
+                <div class="p-3 p-md-4 rounded-3 mb-4 position-relative overflow-hidden" style="background: linear-gradient(145deg, rgba(214,168,75,0.12) 0%, rgba(18,22,32,0.95) 100%); border: 1.5px solid var(--gold); box-shadow: 0 0 25px rgba(214,168,75,0.15);">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-gold text-dark fw-bold text-uppercase" style="letter-spacing: 0.05em;">
+                      <i class="bi bi-lightning-charge-fill me-1"></i> Instant Confirmation (Recommended)
+                    </span>
+                    <span class="text-cyan small fw-bold font-monospace">100% SECURE</span>
+                  </div>
+
+                  <h5 class="text-light fw-bold mb-1">Pay Online with Razorpay</h5>
+                  <p class="text-muted-iron small mb-3">
+                    Unlock instant auto-confirmation. Pay with <strong>GPay, PhonePe, Paytm, Any UPI, Cards, or NetBanking</strong>.
+                  </p>
+
+                  <div class="d-flex justify-content-between align-items-center p-3 rounded mb-3" style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-color);">
+                    <div>
+                      <span class="text-muted-iron small d-block">Payable Amount:</span>
+                      <strong class="text-light small"><?= e($booking['station_name']) ?> (<?= $booking['duration_hours'] ?> hr)</strong>
+                    </div>
+                    <div class="text-end">
+                      <span class="fs-3 fw-bold text-gold brand-font"><?= format_currency($booking['final_amount']) ?></span>
+                    </div>
+                  </div>
+
+                  <button id="rzp-pay-btn" type="button" class="btn btn-iron btn-iron-primary w-100 py-3 fs-6 fw-bold shadow-lg">
+                    <i class="bi bi-shield-lock-fill me-2"></i> Pay Now with Razorpay (<?= format_currency($booking['final_amount']) ?>)
+                  </button>
+
+                  <div id="rzp-status-box" class="mt-3" style="display: none;"></div>
+
+                  <div class="d-flex align-items-center justify-content-center gap-3 mt-3 text-muted-iron" style="font-size: 0.72rem;">
+                    <span><i class="bi bi-shield-check text-green me-1"></i> 256-bit SSL</span>
+                    <span>&bull;</span>
+                    <span><i class="bi bi-upc-scan text-gold me-1"></i> UPI & All Cards</span>
+                    <span>&bull;</span>
+                    <span><i class="bi bi-check2-circle text-cyan me-1"></i> Instant 1-Page Pass</span>
+                  </div>
+
+                  <?php if (get_razorpay_mode() === 'test'): ?>
+                    <div class="mt-3 p-2 rounded text-start" style="background: rgba(0, 229, 255, 0.06); border: 1px dashed rgba(0, 229, 255, 0.4); font-size: 0.72rem; color: #b0e8f7;">
+                      <div class="fw-bold text-cyan mb-1"><i class="bi bi-info-circle-fill me-1"></i> Test Mode Credentials (INR Domestic):</div>
+                      <div class="mb-1">&bull; <strong>UPI (Instant):</strong> In modal choose UPI &rarr; Enter <code>success@razorpay</code> or click Simulator</div>
+                      <div class="mb-1">&bull; <strong>Indian Domestic Visa:</strong> <code>4100 2800 0000 1007</code> (Exp: 12/28, CVV: 123, OTP: 1234)</div>
+                      <div>&bull; <strong>Indian Domestic Mastercard:</strong> <code>5555 5100 0008 1006</code></div>
+                    </div>
+                  <?php endif; ?>
+                </div>
+              <?php endif; ?>
+
+              <!-- ==============================================
+                   OPTION B: MANUAL UPI QR & UTR SUBMISSION (COLLAPSIBLE)
+                   ============================================== -->
+              <div class="accordion" id="manualUpiAccordion">
+                <div class="accordion-item" style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 8px;">
+                  <h2 class="accordion-header" id="headingManual">
+                    <button class="accordion-button <?= $rzp_enabled ? 'collapsed' : '' ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseManual" aria-expanded="<?= $rzp_enabled ? 'false' : 'true' ?>" style="background: rgba(22, 27, 38, 0.7); color: var(--text-main); font-size: 0.9rem;">
+                      <i class="bi bi-qr-code-scan text-cyan me-2"></i>
+                      <span><?= $rzp_enabled ? 'Or Pay Manually via UPI QR & Submit UTR' : 'Pay via UPI QR Scanner & Submit UTR' ?></span>
+                    </button>
+                  </h2>
+                  <div id="collapseManual" class="accordion-collapse collapse <?= $rzp_enabled ? '' : 'show' ?>" data-bs-parent="#manualUpiAccordion">
+                    <div class="accordion-body p-3">
+                      <!-- QR Code Box -->
+                      <div class="text-center p-3 rounded mb-3" style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-color);">
+                        <p class="text-muted-iron small mb-2">Scan & Pay using any UPI App (GPay, PhonePe, Paytm, BHIM):</p>
+                        
+                        <div class="d-inline-block p-2 bg-dark rounded-3 border border-secondary border-opacity-50 my-2" style="max-width: 240px;">
+                          <img src="<?= BASE_URL . e($upi_qr_img) ?>" alt="<?= e($brand_short) ?> UPI QR" class="img-fluid rounded" style="max-height: 220px; width: 100%; object-fit: contain;">
+                        </div>
+
+                        <div class="mt-2">
+                          <span class="text-muted-iron small d-block">UPI Payee ID:</span>
+                          <strong class="text-gold font-monospace fs-6"><?= e($upi_id) ?></strong>
+                          <span class="text-muted-iron small d-block mt-1">Merchant: <strong><?= e($upi_merchant) ?></strong></span>
+                          <span class="badge bg-gold text-dark fs-6 mt-2">Exact Amount: <?= format_currency($booking['final_amount']) ?></span>
+                        </div>
+                      </div>
+
+                      <!-- UTR Submission Form -->
+                      <form method="POST" action="<?= BASE_URL ?>check-booking.php?ref=<?= urlencode($booking['booking_ref']) ?>" enctype="multipart/form-data">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="booking_ref" value="<?= e($booking['booking_ref']) ?>">
+                        <input type="hidden" name="phone" value="<?= e($booking['customer_phone']) ?>">
+                        <input type="hidden" name="submit_payment" value="1">
+
+                        <div class="mb-3">
+                          <label for="upiUtr" class="form-label">
+                            12-Digit UPI Transaction ID / UTR <span class="text-danger">*</span>
+                          </label>
+                          <input type="text" name="upi_transaction_id" id="upiUtr" class="form-control font-monospace" placeholder="e.g. 431289012345" value="<?= e($payment['upi_transaction_id'] ?? '') ?>" required>
+                          <div class="form-text text-muted-iron small">Found in your GPay / PhonePe / Paytm payment receipt screen.</div>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="proofFile" class="form-label">Upload Payment Screenshot (Optional)</label>
+                          <input type="file" name="proof_file" id="proofFile" class="form-control" accept="image/jpeg,image/png,image/webp">
+                          <div class="form-text text-muted-iron small">Accepted: JPG, PNG, WEBP (Max 5MB).</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-outline-warning w-100 py-2">
+                          <i class="bi bi-shield-check me-1"></i> Submit Transaction For Counter Verification
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
+
             <?php endif; ?>
 
           </div>
@@ -523,6 +625,172 @@ require_once __DIR__ . '/includes/header.php';
 
   </div>
 </section>
+
+<?php if ($booking && (!$payment || $payment['status'] !== 'verified') && $rzp_enabled): ?>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const payBtn = document.getElementById('rzp-pay-btn');
+  const statusBox = document.getElementById('rzp-status-box');
+  const bookingRef = <?= json_encode($booking['booking_ref']) ?>;
+  const csrfToken = <?= json_encode(csrf_token()) ?>;
+
+  function showStatus(type, msg) {
+    if (!statusBox) return;
+    statusBox.style.display = 'block';
+    const alertClass = type === 'success' ? 'alert-success' : (type === 'info' ? 'alert-info' : 'alert-danger');
+    const icon = type === 'success' ? 'bi-check-circle-fill' : (type === 'info' ? 'bi-hourglass-split' : 'bi-exclamation-triangle-fill');
+    statusBox.innerHTML = `
+      <div class="alert ${alertClass} py-2 px-3 small d-flex align-items-center gap-2 mb-0">
+        <i class="bi ${icon} fs-6"></i>
+        <div>${msg}</div>
+      </div>
+    `;
+  }
+
+  function triggerRazorpayCheckout() {
+    if (!payBtn) return;
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Initializing Gateway...';
+    showStatus('info', 'Connecting securely to Razorpay servers...');
+
+    fetch('<?= BASE_URL ?>api/razorpay-create-order.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+      },
+      body: JSON.stringify({
+        booking_ref: bookingRef,
+        csrf_token: csrfToken
+      })
+    })
+    .then(async res => {
+      const rawText = await res.text();
+      let data;
+      try {
+        data = JSON.parse(rawText);
+      } catch (jsonErr) {
+        throw new Error('Server returned invalid response (HTTP ' + res.status + '): ' + (rawText.length > 200 ? rawText.substring(0, 200) + '...' : rawText));
+      }
+      return data;
+    })
+    .then(data => {
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to initialize payment order.');
+      }
+
+      const options = {
+        key: data.key_id,
+        amount: data.amount,
+        currency: data.currency,
+        name: data.name,
+        description: data.description,
+        image: data.image,
+        order_id: data.order_id,
+        prefill: data.prefill,
+        notes: data.notes,
+        theme: data.theme,
+        handler: function(response) {
+          showStatus('info', '<span class="spinner-border spinner-border-sm me-2"></span> Payment received! Verifying cryptographic signature...');
+          payBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Locking Session...';
+
+          fetch('<?= BASE_URL ?>api/razorpay-verify.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+              booking_ref: bookingRef,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              csrf_token: csrfToken
+            })
+          })
+          .then(async vRes => {
+            const rawVText = await vRes.text();
+            let vData;
+            try {
+              vData = JSON.parse(rawVText);
+            } catch (vErr) {
+              throw new Error('Verification response error (HTTP ' + vRes.status + '): ' + (rawVText.length > 200 ? rawVText.substring(0, 200) + '...' : rawVText));
+            }
+            return vData;
+          })
+          .then(vData => {
+            if (vData.success) {
+              showStatus('success', '<strong>Payment Verified!</strong> Redirecting to your official digital pass...');
+              setTimeout(() => {
+                window.location.href = vData.redirect_url;
+              }, 1000);
+            } else {
+              payBtn.disabled = false;
+              payBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> Retry Razorpay Payment';
+              showStatus('danger', vData.error || 'Verification failed. Please contact sanctuary counter.');
+            }
+          })
+          .catch(err => {
+            payBtn.disabled = false;
+            payBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> Retry Razorpay Payment';
+            showStatus('danger', 'Verification error: ' + err.message);
+          });
+        },
+        modal: {
+          ondismiss: function() {
+            payBtn.disabled = false;
+            payBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> Pay Now with Razorpay (<?= format_currency($booking['final_amount']) ?>)';
+            showStatus('info', 'Checkout window closed. You can retry anytime or pay manually below.');
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.on('payment.failed', function(resp) {
+        payBtn.disabled = false;
+        payBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> Retry Razorpay Payment';
+        const failureReason = resp.error ? resp.error.description : 'Transaction cancelled or failed.';
+        showStatus('danger', 'Payment failed: ' + failureReason);
+      });
+
+      rzp.open();
+    })
+    .catch(err => {
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> Pay Now with Razorpay (<?= format_currency($booking['final_amount']) ?>)';
+      showStatus('danger', err.message);
+    });
+  }
+
+  if (payBtn) {
+    payBtn.addEventListener('click', triggerRazorpayCheckout);
+  }
+
+  // Auto trigger if ?pay=razorpay or ?pay=1 in query string
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('pay') === 'razorpay' || urlParams.get('pay') === '1' || urlParams.get('auto') === '1') {
+    setTimeout(triggerRazorpayCheckout, 400);
+  }
+});
+</script>
+<?php endif; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.btn-copy-ref').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const text = this.getAttribute('data-copy');
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = this.innerHTML;
+        this.innerHTML = '<i class="bi bi-check2 text-success"></i>';
+        setTimeout(() => { this.innerHTML = orig; }, 1500);
+      });
+    });
+  });
+});
+</script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
 

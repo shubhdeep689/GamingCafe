@@ -619,6 +619,20 @@ require_once __DIR__ . '/includes/admin-header.php';
 
         <?php if ($payment): ?>
           <div class="mb-3">
+            <label class="form-label text-muted-iron small d-block mb-1">Payment Method</label>
+            <div>
+              <?php if (($payment['payment_method'] ?? '') === 'razorpay'): ?>
+                <span class="badge" style="background: #3399cc !important; color: #fff;"><i class="bi bi-lightning-charge-fill me-1"></i>Razorpay Online Gateway</span>
+                <?php if (!empty($payment['razorpay_order_id'])): ?>
+                  <div class="small text-muted-iron mt-1 font-monospace" style="font-size: 0.72rem;">Order: <?= e($payment['razorpay_order_id']) ?></div>
+                <?php endif; ?>
+              <?php else: ?>
+                <span class="badge bg-secondary text-uppercase"><?= e($payment['payment_method'] ?? 'Manual UPI / Cash') ?></span>
+              <?php endif; ?>
+            </div>
+          </div>
+
+          <div class="mb-3">
             <label for="payStatus" class="form-label">Payment Verification Status</label>
             <select name="payment_status" id="payStatus" class="form-select">
               <option value="pending" <?= $payment['status'] === 'pending' ? 'selected' : '' ?>>Pending Verification</option>

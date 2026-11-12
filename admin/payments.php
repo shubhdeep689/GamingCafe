@@ -232,6 +232,9 @@ require_once __DIR__ . '/includes/admin-header.php';
               <td>
                 <?php if (!empty($p['upi_transaction_id'])): ?>
                   <span class="font-monospace text-gold fw-bold d-block fs-6"><?= e($p['upi_transaction_id']) ?></span>
+                  <?php if ($p['payment_method'] === 'razorpay'): ?>
+                    <span class="badge bg-dark border border-info text-cyan" style="font-size: 0.6rem;"><i class="bi bi-shield-check me-1"></i>Razorpay Gateway</span>
+                  <?php endif; ?>
                 <?php else: ?>
                   <span class="text-secondary small fst-italic">No UTR submitted yet</span>
                 <?php endif; ?>
@@ -259,7 +262,11 @@ require_once __DIR__ . '/includes/admin-header.php';
                 <strong class="text-gold"><?= format_currency($p['amount']) ?></strong>
               </td>
               <td>
-                <span class="badge bg-secondary text-uppercase" style="font-size: 0.65rem;"><?= e($p['payment_method']) ?></span>
+                <?php if ($p['payment_method'] === 'razorpay'): ?>
+                  <span class="badge text-uppercase" style="font-size: 0.65rem; background: #3399cc !important; color: #fff;"><i class="bi bi-lightning-charge-fill me-1"></i>Razorpay</span>
+                <?php else: ?>
+                  <span class="badge bg-secondary text-uppercase" style="font-size: 0.65rem;"><?= e($p['payment_method']) ?></span>
+                <?php endif; ?>
               </td>
               <td>
                 <?= payment_status_badge($p['status']) ?>

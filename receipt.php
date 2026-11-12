@@ -560,6 +560,11 @@ $brand_logo    = get_brand_logo();
     </div>
 
     <div class="d-flex align-items-center gap-2">
+      <?php if (!$payment || $payment['status'] !== 'verified'): ?>
+        <a href="<?= BASE_URL ?>check-booking.php?ref=<?= urlencode($booking['booking_ref']) ?>&pay=razorpay" class="btn btn-warning btn-sm fw-bold text-dark px-3 shadow-sm">
+          <i class="bi bi-lightning-charge-fill me-1"></i> Pay Now with Razorpay
+        </a>
+      <?php endif; ?>
       <?php $wa_pass = generate_whatsapp_url('confirmed', $booking); ?>
       <button onclick="downloadPDFPass()" id="btnDownloadPDF" class="btn btn-danger btn-sm fw-bold px-3 shadow-sm">
         <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download PDF Pass
@@ -708,9 +713,28 @@ $brand_logo    = get_brand_logo();
       <!-- 5. Payment Details & Total Amount Bar -->
       <div class="total-bar">
         <div class="pay-details">
-          <div>Payment Method: <strong class="text-uppercase"><?= e($payment['payment_method'] ?? 'Counter Cash / UPI') ?></strong></div>
-          <div>Transaction / UTR ID: <strong><?= e($payment['upi_transaction_id'] ?? 'VERIFIED AT COUNTER') ?></strong></div>
-          <div>Verification: <strong class="text-success"><i class="bi bi-shield-check"></i> <?= ($payment && $payment['status'] === 'verified') ? 'VERIFIED BY ADMIN' : 'AUTHORIZED ENTRY' ?></strong></div>
+          <div>Payment Method: 
+            <strong class="text-uppercase">
+              <?php if (($payment['payment_method'] ?? '') === 'razorpay'): ?>
+                Razorpay Online Gateway
+              <?php else: ?>
+                <?= e($payment['payment_method'] ?? 'Counter Cash / UPI') ?>
+              <?php endif; ?>
+            </strong>
+          </div>
+          <div>Transaction / Ref ID: 
+            <strong class="font-monospace"><?= e($payment['razorpay_payment_id'] ?? $payment['upi_transaction_id'] ?? 'VERIFIED AT COUNTER') ?></strong>
+          </div>
+          <div>Verification: 
+            <strong class="text-success">
+              <i class="bi bi-shield-check"></i> 
+              <?php if ($payment && $payment['status'] === 'verified'): ?>
+                <?= (($payment['payment_method'] ?? '') === 'razorpay') ? 'VERIFIED VIA RAZORPAY GATEWAY' : 'VERIFIED BY ADMIN' ?>
+              <?php else: ?>
+                PENDING / AUTHORIZED ENTRY
+              <?php endif; ?>
+            </strong>
+          </div>
         </div>
 
         <div class="total-amount-box">

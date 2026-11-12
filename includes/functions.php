@@ -997,3 +997,184 @@ function generate_whatsapp_url(string $type, array $booking, array $extra = []):
     return 'https://wa.me/91' . $phone . '?text=' . rawurlencode($msg);
 }
 
+// =========================================================================
+// 21. Razorpay Payment Gateway Integration
+// =========================================================================
+
+function get_razorpay_key_id(): string {
+    $key = get_setting('razorpay_key_id', '');
+    if (!empty($key)) {
+        return $key;
+    }
+    return (string)env('RAZORPAY_KEY_ID', defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : '');
+}
+
+function get_razorpay_key_secret(): string {
+    $secret = get_setting('razorpay_key_secret', '');
+    if (!empty($secret)) {
+        return $secret;
+    }
+    return (string)env('RAZORPAY_KEY_SECRET', defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : '');
+}
+
+function get_razorpay_mode(): string {
+    $mode = get_setting('razorpay_mode', '');
+    if (!empty($mode)) {
+        return $mode;
+    }
+    return (string)env('RAZORPAY_MODE', defined('RAZORPAY_MODE') ? RAZORPAY_MODE : 'test');
+}
+
+function is_razorpay_enabled(): bool {
+    $enabled = get_setting('razorpay_enabled', '1');
+    return ($enabled === '1' || $enabled === 'true' || $enabled === 'yes') 
+        && !empty(get_razorpay_key_id()) 
+        && !empty(get_razorpay_key_secret());
+}
+
+/**
+ * Create a server-side order on Razorpay
+ *
+ * @param float $amount Amount in INR
+ * @param string $receipt_ref Booking Reference
+ * @param array $notes Metadata notes
+ * @return array ['success' => bool, 'order' => array|null, 'error' => string|null]
+ */
+function razorpay_create_order(float $amount, string $receipt_ref, array $notes = []): array {
+    $key_id = get_razorpay_key_id();
+    $key_secret = get_razorpay_key_secret();
+
+    if (empty($key_id) || empty($key_secret)) {
+        return ['success' => false, 'error' => 'Razorpay API credentials not configured.'];
+    }
+
+    $amount_in_paise = (int)round($amount * 100);
+    if ($amount_in_paise <= 0) {
+        return ['success' => false, 'error' => 'Invalid payable amount.'];
+    }
+
+    $payload = [
+        'amount'   => $amount_in_paise,
+        'currency' => 'INR',
+        'receipt'  => substr($receipt_ref, 0, 40),
+        'notes'    => $notes
+    ];
+    $json_payload = json_encode($payload);
+
+    $response = false;
+    $http_code = 0;
+    $err_details = '';
+
+    // Method 1: Use cURL if enabled in PHP environment
+    if (function_exists('curl_init')) {
+        try {
+            $ch = curl_init('https://api.razorpay.com/v1/orders');
+            $curl_options = [
+                CURLOPT_POST           => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_USERPWD        => $key_id . ':' . $key_secret,
+                CURLOPT_POSTFIELDS     => $json_payload,
+                CURLOPT_HTTPHEADER     => [
+                    'Content-Type: application/json',
+                    'Accept: application/json'
+                ],
+                CURLOPT_TIMEOUT        => 15,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => 0
+            ];
+
+            $ca_cert = 'C:/xampp/perl/vendor/lib/Mozilla/CA/cacert.pem';
+            if (file_exists($ca_cert)) {
+                $curl_options[CURLOPT_CAINFO] = $ca_cert;
+            }
+
+            curl_setopt_array($ch, $curl_options);
+            $response = curl_exec($ch);
+            $http_code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curl_error = curl_error($ch);
+            curl_close($ch);
+
+            if ($response === false) {
+                $err_details = 'cURL error: ' . $curl_error;
+            }
+        } catch (\Throwable $t) {
+            $err_details = 'cURL exception: ' . $t->getMessage();
+            $response = false;
+        }
+    }
+
+    // Method 2: High-Performance Native Stream Context Fallback (does not depend on cURL extension)
+    if ($response === false || empty($response)) {
+        try {
+            $auth = base64_encode($key_id . ':' . $key_secret);
+            $stream_opts = [
+                'http' => [
+                    'method'        => 'POST',
+                    'header'        => [
+                        "Authorization: Basic {$auth}",
+                        "Content-Type: application/json",
+                        "Accept: application/json"
+                    ],
+                    'content'       => $json_payload,
+                    'ignore_errors' => true,
+                    'timeout'       => 15
+                ],
+                'ssl' => [
+                    'verify_peer'      => false,
+                    'verify_peer_name' => false
+                ]
+            ];
+
+            $context = stream_context_create($stream_opts);
+            $stream_res = @file_get_contents('https://api.razorpay.com/v1/orders', false, $context);
+
+            if ($stream_res !== false) {
+                $response = $stream_res;
+                if (isset($http_response_header) && is_array($http_response_header)) {
+                    foreach ($http_response_header as $hdr) {
+                        if (preg_match('#^HTTP/\S+\s+(\d{3})#i', $hdr, $m)) {
+                            $http_code = (int)$m[1];
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $t) {
+            $err_details .= ' | Stream exception: ' . $t->getMessage();
+        }
+    }
+
+    if ($response === false || empty($response)) {
+        error_log('Razorpay Order Connection Error: ' . $err_details);
+        return ['success' => false, 'error' => 'Connection to payment gateway failed. Please ensure internet access or use the manual UPI QR scanner.'];
+    }
+
+    $data = json_decode($response, true);
+    if ($http_code >= 200 && $http_code < 300 && !empty($data['id'])) {
+        return ['success' => true, 'order' => $data];
+    }
+
+    $err_msg = $data['error']['description'] ?? 'Failed to initialize payment gateway order.';
+    error_log('Razorpay Order Creation Failed (HTTP ' . $http_code . '): ' . $response);
+    return ['success' => false, 'error' => $err_msg];
+}
+
+/**
+ * Cryptographically verify Razorpay payment signature
+ *
+ * @param string $order_id Razorpay Order ID (order_xxx)
+ * @param string $payment_id Razorpay Payment ID (pay_xxx)
+ * @param string $signature HMAC SHA256 Signature returned by Checkout JS
+ * @return bool
+ */
+function razorpay_verify_signature(string $order_id, string $payment_id, string $signature): bool {
+    $secret = get_razorpay_key_secret();
+    if (empty($secret) || empty($order_id) || empty($payment_id) || empty($signature)) {
+        return false;
+    }
+
+    $expected_signature = hash_hmac('sha256', $order_id . '|' . $payment_id, $secret);
+    return hash_equals($expected_signature, $signature);
+}
+
+

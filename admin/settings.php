@@ -38,9 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
             'meta_title'       => 'seo',
             'meta_description' => 'seo',
             'meta_keywords'    => 'seo',
-            'instagram_url'    => 'social',
-            'discord_url'      => 'social',
-            'youtube_url'      => 'social'
+            'instagram_url'       => 'social',
+            'discord_url'         => 'social',
+            'youtube_url'         => 'social',
+            'razorpay_key_id'     => 'payment_gateway',
+            'razorpay_key_secret' => 'payment_gateway',
+            'razorpay_mode'       => 'payment_gateway'
         ];
 
         foreach ($settings_to_update as $key => $group) {
@@ -48,6 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
                 update_setting($key, trim($_POST[$key]), $group);
             }
         }
+
+        // Razorpay Gateway Enable/Disable Toggle
+        $razorpay_enabled = isset($_POST['razorpay_enabled']) ? '1' : '0';
+        update_setting('razorpay_enabled', $razorpay_enabled, 'payment_gateway');
 
         // 2. Handle Logo Image Upload or Reset
         if (!empty($_FILES['logo_file']['name']) && $_FILES['logo_file']['error'] === UPLOAD_ERR_OK) {
@@ -358,6 +365,59 @@ require_once __DIR__ . '/includes/admin-header.php';
             <div class="col-12">
               <label class="form-label">Target SEO Keywords</label>
               <input type="text" name="meta_keywords" class="form-control" value="<?= e(get_setting('meta_keywords', '')) ?>">
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             SECTION 6: ONLINE PAYMENT GATEWAY (RAZORPAY)
+             ========================================== -->
+        <div class="mb-5 pt-4 border-top border-secondary border-opacity-25">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="text-gold brand-font mb-0 d-flex align-items-center gap-2">
+              <i class="bi bi-credit-card-2-front text-gold fs-5"></i> 6. Razorpay Payment Gateway Integration
+            </h5>
+            <span class="badge bg-dark border border-secondary text-cyan font-monospace">API v1</span>
+          </div>
+
+          <p class="text-muted-iron small mb-4">
+            Connect Razorpay to accept instant payments via UPI (Google Pay, PhonePe, Paytm, BHIM), Credit/Debit Cards, and NetBanking. Customers receive instant booking confirmation without requiring manual counter verification.
+          </p>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="p-3 rounded" style="background: rgba(214,168,75,0.06); border: 1px solid rgba(214,168,75,0.25);">
+                <div class="form-check form-switch mb-0">
+                  <input class="form-check-input" type="checkbox" role="switch" id="razorpaySwitch" name="razorpay_enabled" value="1" <?= is_razorpay_enabled() ? 'checked' : '' ?>>
+                  <label class="form-check-label fw-bold text-light ms-2" for="razorpaySwitch">
+                    Enable Razorpay Online Checkout on Website
+                  </label>
+                </div>
+                <div class="form-text text-muted-iron small ms-4 ps-2 mt-1">
+                  When enabled, customers can pay instantly with cards and UPI apps. If disabled, users will use the manual UPI QR code scanner.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Gateway Operating Mode</label>
+              <select name="razorpay_mode" class="form-select">
+                <option value="test" <?= get_razorpay_mode() === 'test' ? 'selected' : '' ?>>Test / Sandbox Mode (Recommended)</option>
+                <option value="live" <?= get_razorpay_mode() === 'live' ? 'selected' : '' ?>>Live / Production Mode</option>
+              </select>
+              <div class="form-text text-muted-iron small">Use test keys for simulated payments; switch to live keys to collect real bank settlements.</div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Razorpay Key ID <span class="text-danger">*</span></label>
+              <input type="text" name="razorpay_key_id" class="form-control font-monospace" value="<?= e(get_razorpay_key_id()) ?>" placeholder="rzp_test_... or rzp_live_...">
+              <div class="form-text text-muted-iron small">Available in Razorpay Dashboard &rarr; Settings &rarr; API Keys.</div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Razorpay Key Secret <span class="text-danger">*</span></label>
+              <input type="password" name="razorpay_key_secret" class="form-control font-monospace" value="<?= e(get_razorpay_key_secret()) ?>" placeholder="Enter Razorpay Secret Key">
+              <div class="form-text text-muted-iron small">Keep this secret secure. Used to sign and verify payments cryptographically.</div>
             </div>
           </div>
         </div>

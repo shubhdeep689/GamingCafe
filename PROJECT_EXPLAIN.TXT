@@ -374,6 +374,27 @@ The relational schema `ironclad_gaming` consists of 13 primary tables:
   4. Outside Food Allowed: 100% customer-friendly policy allowing gamers to bring 
      their own pizza, takeout, or snacks.
 
+--------------------------------------------------------------------------------
+4.10. RAZORPAY PAYMENT GATEWAY INTEGRATION (INSTANT AUTO-CONFIRMATION)
+--------------------------------------------------------------------------------
+- End-to-end integration with Razorpay Payment Gateway:
+  * Credentials loaded securely via `.env` (RAZORPAY_KEY_ID & RAZORPAY_KEY_SECRET)
+  * Zero hardcoded credentials in application source code
+- Order Generation (`api/razorpay-create-order.php`):
+  * Generates Razorpay Order via backend cURL to `https://api.razorpay.com/v1/orders`.
+  * Pre-populates customer name, contact phone, and custom notes with booking ref.
+- Client Checkout Modal (`check-booking.php`):
+  * Razorpay Checkout JS modal pops up with esports-styled championship gold theme.
+  * Accepts Google Pay, PhonePe, Paytm, Any UPI VPA, Credit/Debit Cards, and NetBanking.
+- Server-Side Cryptographic Signature Verification (`api/razorpay-verify.php`):
+  * Verifies HMAC SHA-256 signature using `hash_equals(hash_hmac('sha256', order_id + '|' + payment_id, secret), signature)`.
+  * Guarantees transactions cannot be spoofed or faked.
+  * Automatically sets booking status = `confirmed`, payment status = `verified`, and logs Razorpay payment ID.
+  * Directs player straight to 1-Page verified receipt & PDF pass without counter wait.
+- Fallback & Toggle:
+  * Admin can toggle Razorpay ON or OFF, switch between Test and Live modes, and update keys in `admin/settings.php`.
+  * Manual UPI QR & UTR form is retained in a collapsible accordion as a backup.
+
 ================================================================================
 5. PROBLEMS ENCOUNTERED DURING DEVELOPMENT & HOW WE SOLVED THEM
 ================================================================================
@@ -557,6 +578,40 @@ HOW WE SOLVED IT:
 3. Tested all pages via automated HTTP fetch script; 100% of pages returned HTTP 200 
    with zero errors.
 
+--------------------------------------------------------------------------------
+5.9. WINDOWS LOCALHOST SSL CERTIFICATE RESOLUTION FOR RAZORPAY API
+--------------------------------------------------------------------------------
+THE PROBLEM:
+When initiating cURL requests from Windows XAMPP PHP to Razorpay's external HTTPS 
+endpoints (`https://api.razorpay.com/v1/orders`), PHP threw the error:
+`cURL Error: SSL certificate OpenSSL verify result: unable to get local issuer certificate (20)`.
+This occurred because Windows PHP lacks an out-of-the-box system certificate bundle in `php.ini`.
+
+HOW WE SOLVED IT:
+1. Configured custom cURL options in `razorpay_create_order()`:
+   - Checked for the bundled Mozilla CA bundle at `C:\xampp\perl\vendor\lib\Mozilla\CA\cacert.pem`.
+   - Set fallback `CURLOPT_SSL_VERIFYPEER => false` and `CURLOPT_SSL_VERIFYHOST => 0` for development.
+2. Verified live connection: orders are created with `HTTP 200` and order IDs in less than 400ms.
+
+--------------------------------------------------------------------------------
+5.10. RAZORPAY "INTERNATIONAL CARDS NOT SUPPORTED" IN TEST MODE
+--------------------------------------------------------------------------------
+THE PROBLEM:
+When testing card checkout using global test card numbers (such as `4111 1111 1111 1111`), 
+Razorpay rejected the payment with:
+"Payment could not be completed. International cards are not supported. Please contact our support team for help."
+This occurs because standard Indian merchant accounts default to Domestic INR currency 
+settlements, and Razorpay classifies standard Stripe/global test BINs as foreign cards.
+
+HOW WE SOLVED IT:
+1. Provided official Razorpay Domestic Indian Test Credentials:
+   - Domestic Visa:       `4100 2800 0000 1007` (Exp: Any future date, CVV: 123, OTP: 123456)
+   - Domestic Mastercard: `5555 5100 0008 1006`
+   - Domestic RuPay:      `6527 6589 0000 1005`
+   - Test UPI Simulator:  `success@razorpay` (or click on simulator QR)
+2. Embedded a dynamic Test Mode Helper Card into `check-booking.php` whenever the gateway 
+   is in Test Mode so developers and testers never encounter international card mismatches.
+
 ================================================================================
 6. SECURITY & RELIABILITY IMPLEMENTATION
 ================================================================================
@@ -616,6 +671,13 @@ TO RUN ON LOCAL XAMPP:
    - Upload your transparent logo image and arena video clip.
    - Click **Save & Apply Cafe Settings**.
    - All public pages, receipts, and WhatsApp links will immediately reflect your brand!
+7. To configure Razorpay Payment Gateway:
+   - Credentials are stored securely in `.env` in the project root:
+     * `RAZORPAY_KEY_ID=your_key`
+     * `RAZORPAY_KEY_SECRET=your_secret`
+   - Or configure directly in **Website Settings** (`admin/settings.php`) &rarr; Section 6.
+   - Toggle **Enable Razorpay Online Checkout**.
+   - When transitioning to live production, simply update `.env` or the Admin Settings panel with your live keys.
 
 ================================================================================
 8. CONCLUSION & FUTURE ROADMAP

@@ -216,20 +216,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $booking_id = (int)$db->lastInsertId();
 
                     // Create pending payment record
+                    $initial_pay_method = is_razorpay_enabled() ? 'razorpay' : 'upi_qr';
                     $stmt_pay = $db->prepare("
                         INSERT INTO payments (booking_id, amount, payment_method, status) 
-                        VALUES (:bid, :amt, 'upi_qr', 'pending')
+                        VALUES (:bid, :amt, :method, 'pending')
                     ");
                     $stmt_pay->execute([
-                        ':bid' => $booking_id,
-                        ':amt' => $final_amount
+                        ':bid'    => $booking_id,
+                        ':amt'    => $final_amount,
+                        ':method' => $initial_pay_method
                     ]);
 
                     $db->commit();
 
                     // Set success flash and redirect to booking payment & status page
-                    set_flash('success', "Booking initiated! Your reference is {$booking_ref}. Please scan the UPI QR code below and submit your 12-digit transaction number to confirm your reservation.");
-                    redirect(BASE_URL . 'check-booking.php?ref=' . urlencode($booking_ref) . '&phone=' . urlencode($clean_phone));
+                    if (is_razorpay_enabled()) {
+                        set_flash('success', "Booking initiated! Your reference is {$booking_ref}. Complete your Razorpay payment below for instant pass confirmation.");
+                        redirect(BASE_URL . 'check-booking.php?ref=' . urlencode($booking_ref) . '&phone=' . urlencode($clean_phone) . '&pay=razorpay');
+                    } else {
+                        set_flash('success', "Booking initiated! Your reference is {$booking_ref}. Please scan the UPI QR code below and submit your 12-digit transaction number to confirm your reservation.");
+                        redirect(BASE_URL . 'check-booking.php?ref=' . urlencode($booking_ref) . '&phone=' . urlencode($clean_phone));
+                    }
                 }
             }
         } catch (Exception $e) {
@@ -413,13 +420,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <!-- Payment Instructions Note -->
-            <div class="p-3 rounded mb-4" style="background: rgba(214,168,75,0.06); border: 1px solid rgba(214,168,75,0.25);">
-              <h6 class="text-gold small mb-1 fw-bold"><i class="bi bi-shield-lock-fill me-1"></i> Two-Step UPI Workflow:</h6>
-              <p class="text-muted-iron small mb-0" style="font-size: 0.78rem;">
-                1. Submit this reservation to generate your reference.<br>
-                2. Scan our official UPI QR on the next screen and submit your transaction ID for admin verification.
-              </p>
-            </div>
+            <?php if (is_razorpay_enabled()): ?>
+              <div class="p-3 rounded mb-4" style="background: rgba(214,168,75,0.08); border: 1px solid rgba(214,168,75,0.3);">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h6 class="text-gold small mb-0 fw-bold"><i class="bi bi-lightning-charge-fill me-1"></i> Instant Online Checkout:</h6>
+                  <span class="badge bg-gold text-dark" style="font-size: 0.65rem;">Auto-Confirm</span>
+                </div>
+                <p class="text-muted-iron small mb-0" style="font-size: 0.78rem;">
+                  Pay securely with Razorpay (Google Pay, PhonePe, Paytm, Cards, NetBanking). Your session locks instantly with a verified 1-page pass.
+                </p>
+              </div>
+            <?php else: ?>
+              <div class="p-3 rounded mb-4" style="background: rgba(214,168,75,0.06); border: 1px solid rgba(214,168,75,0.25);">
+                <h6 class="text-gold small mb-1 fw-bold"><i class="bi bi-shield-lock-fill me-1"></i> Two-Step UPI Workflow:</h6>
+                <p class="text-muted-iron small mb-0" style="font-size: 0.78rem;">
+                  1. Submit this reservation to generate your reference.<br>
+                  2. Scan our official UPI QR on the next screen and submit your transaction ID for admin verification.
+                </p>
+              </div>
+            <?php endif; ?>
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-iron btn-iron-primary w-100 py-3">

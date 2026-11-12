@@ -12,6 +12,10 @@ ini_set('log_errors', '1');
 // Set Indian Standard Time (Asia/Kolkata)
 date_default_timezone_set('Asia/Kolkata');
 
+// Load Secure Environment Variables from .env file
+require_once __DIR__ . '/env.php';
+load_env(dirname(__DIR__) . '/.env');
+
 // Secure Session Configuration
 if (session_status() === PHP_SESSION_NONE) {
     $is_https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
@@ -27,23 +31,28 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Database Credentials
-define('DB_HOST', '127.0.0.1');
-define('DB_NAME', 'ironclad_gaming');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_PORT', 3306);
-define('DB_CHARSET', 'utf8mb4');
+// Database Credentials (Loaded securely via .env)
+define('DB_HOST', env('DB_HOST', '127.0.0.1'));
+define('DB_NAME', env('DB_NAME', 'ironclad_gaming'));
+define('DB_USER', env('DB_USER', 'root'));
+define('DB_PASS', env('DB_PASS', ''));
+define('DB_PORT', (int)env('DB_PORT', 3306));
+define('DB_CHARSET', env('DB_CHARSET', 'utf8mb4'));
 
 // Brand Identity
-define('APP_NAME', 'IRONCLAD GAMING SANCTUARY');
-define('APP_TAGLINE', 'Gaming. Competition. Community.');
+define('APP_NAME', env('APP_NAME', 'IRONCLAD GAMING SANCTUARY'));
+define('APP_TAGLINE', env('APP_TAGLINE', 'Gaming. Competition. Community.'));
 define('APP_VERSION', '1.0.0');
-define('APP_ADDRESS', 'Behind Redtape Showroom, Near PSPCL Office, Guru Angad Dev Nagar, Sri Muktsar Sahib, Punjab – 152026');
-define('APP_CITY', 'Sri Muktsar Sahib');
-define('APP_STATE', 'Punjab');
-define('APP_PIN', '152026');
-define('APP_COUNTRY', 'India');
+define('APP_ADDRESS', env('APP_ADDRESS', 'Behind Redtape Showroom, Near PSPCL Office, Guru Angad Dev Nagar, Sri Muktsar Sahib, Punjab – 152026'));
+define('APP_CITY', env('APP_CITY', 'Sri Muktsar Sahib'));
+define('APP_STATE', env('APP_STATE', 'Punjab'));
+define('APP_PIN', env('APP_PIN', '152026'));
+define('APP_COUNTRY', env('APP_COUNTRY', 'India'));
+
+// Razorpay Payment Gateway Configuration (Exclusively from .env / site_settings)
+define('RAZORPAY_KEY_ID', env('RAZORPAY_KEY_ID', ''));
+define('RAZORPAY_KEY_SECRET', env('RAZORPAY_KEY_SECRET', ''));
+define('RAZORPAY_MODE', env('RAZORPAY_MODE', 'test'));
 
 // Dynamic Base URL Detection
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
