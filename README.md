@@ -130,3 +130,5 @@ The platform delivers an immersive dark esports arena aesthetic with tasteful **
    - **Public Sanctuary:** `http://localhost/GamingCafe/`
    - **Owner Command Center:** `http://localhost/GamingCafe/admin/login.php`
 
+#   G a m i n g C a f e  
+ 
