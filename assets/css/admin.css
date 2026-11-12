@@ -1,0 +1,413 @@
+/* ==========================================================================
+   IRONCLAD GAMING SANCTUARY — Admin Control Panel Stylesheet
+   Dark Esports Management UI
+   ========================================================================== */
+
+:root {
+  --admin-bg: #090B10;
+  --admin-sidebar-bg: #0E121A;
+  --admin-card-bg: #151922;
+  --admin-card-hover: #1B2230;
+  --gold: #D6A84B;
+  --electric-red: #E63946;
+  --rgb-cyan: #00E5FF;
+  --rgb-green: #39FF88;
+  --rgb-purple: #B026FF;
+  --text-main: #F5F7FA;
+  --text-muted: #A7AFBD;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(214, 168, 75, 0.4);
+}
+
+body.admin-body {
+  background-color: var(--admin-bg);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Sidebar Styling */
+.admin-sidebar {
+  width: 270px;
+  background-color: var(--admin-sidebar-bg);
+  border-right: 1px solid var(--border-color);
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.admin-sidebar-brand {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.admin-sidebar-logo {
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(214, 168, 75, 0.3));
+}
+
+.admin-nav {
+  list-style: none;
+  padding: 1rem 0.75rem;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.admin-nav-item {
+  margin-bottom: 0.25rem;
+}
+
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: all 0.2s ease;
+}
+
+.admin-nav-link i {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.admin-nav-link:hover {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.admin-nav-link.active {
+  color: var(--gold);
+  background: rgba(214, 168, 75, 0.12);
+  border-left: 3px solid var(--gold);
+}
+
+.admin-nav-link.active i {
+  color: var(--gold);
+}
+
+.admin-nav-badge {
+  margin-left: auto;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+}
+
+/* Main Content Area */
+.admin-main-wrapper {
+  margin-left: 270px;
+  width: calc(100% - 270px);
+  max-width: calc(100vw - 270px);
+  min-width: 0;
+  flex-grow: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--admin-bg);
+  background-image: radial-gradient(circle at 90% 10%, rgba(0, 229, 255, 0.03) 0%, transparent 40%);
+  overflow-x: hidden;
+}
+
+.admin-topbar {
+  background-color: rgba(14, 18, 26, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  width: 100%;
+}
+
+.admin-content-container {
+  padding: 1.75rem 1.5rem;
+  flex-grow: 1;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* KPI Stat Cards */
+.kpi-card {
+  background-color: var(--admin-card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.kpi-card:hover {
+  background-color: var(--admin-card-hover);
+  border-color: var(--border-active);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.kpi-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.kpi-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.kpi-icon {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  font-size: 2.5rem;
+  opacity: 0.12;
+  color: var(--text-main);
+}
+
+/* Tables */
+.admin-table-card {
+  background-color: var(--admin-card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Visible Esports Scrollbar for Tables & Panels */
+.admin-table-card::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar,
+.custom-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.admin-table-card::-webkit-scrollbar-track,
+.table-responsive::-webkit-scrollbar-track,
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+}
+.admin-table-card::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb,
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #D6A84B, #F0C46B);
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(214, 168, 75, 0.5);
+}
+.admin-table-card::-webkit-scrollbar-thumb:hover,
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #00E5FF;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+}
+
+.table-dark {
+  --bs-table-bg: transparent;
+  color: var(--text-main);
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.table-dark th {
+  background-color: rgba(0, 0, 0, 0.45);
+  color: var(--gold);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.table-dark td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+  font-size: 0.88rem;
+}
+
+.table-dark tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* ==========================================================================
+   BUTTONS — High Contrast Esports Styling (Never blend into dark background)
+   ========================================================================== */
+.btn-iron {
+  font-family: 'Rajdhani', -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.btn-iron-primary {
+  background: linear-gradient(135deg, #D6A84B 0%, #B88828 100%) !important;
+  color: #090B10 !important;
+  border-color: #F0C46B !important;
+  box-shadow: 0 4px 15px rgba(214, 168, 75, 0.4) !important;
+  font-weight: 800 !important;
+}
+.btn-iron-primary:hover {
+  background: linear-gradient(135deg, #F0C46B 0%, #D6A84B 100%) !important;
+  box-shadow: 0 6px 20px rgba(214, 168, 75, 0.7), 0 0 12px rgba(0, 229, 255, 0.4) !important;
+  transform: translateY(-2px);
+  color: #000000 !important;
+}
+
+.btn-iron-outline {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #F5F7FA !important;
+}
+.btn-iron-outline:hover {
+  border-color: var(--rgb-cyan) !important;
+  color: var(--rgb-cyan) !important;
+  background: rgba(0, 229, 255, 0.12) !important;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+.btn-iron-red {
+  background: linear-gradient(135deg, #E63946 0%, #B71C1C 100%) !important;
+  color: #FFFFFF !important;
+  border-color: #FF5C6A !important;
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4) !important;
+  font-weight: 800 !important;
+}
+.btn-iron-red:hover {
+  background: linear-gradient(135deg, #FF5C6A 0%, #E63946 100%) !important;
+  box-shadow: 0 6px 20px rgba(230, 57, 70, 0.65) !important;
+  transform: translateY(-2px);
+  color: #FFFFFF !important;
+}
+
+.btn-iron-cyan {
+  background: linear-gradient(135deg, #00E5FF 0%, #0099B8 100%) !important;
+  color: #090B10 !important;
+  border-color: #70F0FF !important;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4) !important;
+  font-weight: 800 !important;
+}
+.btn-iron-cyan:hover {
+  background: linear-gradient(135deg, #70F0FF 0%, #00E5FF 100%) !important;
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.7) !important;
+  transform: translateY(-2px);
+  color: #000000 !important;
+}
+
+.btn-iron-sm {
+  padding: 0.45rem 1rem !important;
+  font-size: 0.82rem !important;
+}
+
+/* Secondary & Outline Buttons with guaranteed contrast */
+.btn-outline-secondary {
+  color: #E2E8F0 !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+.btn-outline-secondary:hover {
+  color: #FFFFFF !important;
+  border-color: var(--gold) !important;
+  background: rgba(214, 168, 75, 0.18) !important;
+}
+
+.btn-outline-warning {
+  color: #F0C46B !important;
+  border-color: rgba(214, 168, 75, 0.5) !important;
+  background: rgba(214, 168, 75, 0.08) !important;
+}
+.btn-outline-warning:hover {
+  color: #090B10 !important;
+  background-color: var(--gold) !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 12px rgba(214, 168, 75, 0.5);
+}
+
+.btn-outline-danger {
+  color: #FF7B84 !important;
+  border-color: rgba(230, 57, 70, 0.5) !important;
+  background: rgba(230, 57, 70, 0.08) !important;
+}
+.btn-outline-danger:hover {
+  color: #FFFFFF !important;
+  background-color: var(--electric-red) !important;
+  border-color: var(--electric-red) !important;
+  box-shadow: 0 0 12px rgba(230, 57, 70, 0.5);
+}
+
+.btn-secondary {
+  background-color: #262E3D !important;
+  border-color: #404B60 !important;
+  color: #F5F7FA !important;
+}
+.btn-secondary:hover {
+  background-color: #333D50 !important;
+  border-color: #556380 !important;
+  color: #FFFFFF !important;
+}
+
+/* Responsive Sidebar for Mobile */
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+  }
+  .admin-sidebar.show {
+    transform: translateX(0);
+  }
+  .admin-main-wrapper {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100vw;
+  }
+}
+

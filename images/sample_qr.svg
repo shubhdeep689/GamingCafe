@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#151922" />
+      <stop offset="100%" stop-color="#090B10" />
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D6A84B" />
+      <stop offset="50%" stop-color="#E63946" />
+      <stop offset="100%" stop-color="#00E5FF" />
+    </linearGradient>
+  </defs>
+  <!-- Card Background -->
+  <rect x="5" y="5" width="390" height="390" rx="20" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="3" />
+  
+  <!-- Header Text -->
+  <text x="200" y="45" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="900" fill="#D6A84B" text-anchor="middle" letter-spacing="2">IRONCLAD GAMING</text>
+  <text x="200" y="65" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#A7AFBD" text-anchor="middle">OFFICIAL UPI PAYMENT SCANNER</text>
+  
+  <!-- QR Code White Box -->
+  <rect x="55" y="85" width="290" height="230" rx="12" fill="#FFFFFF" />
+  
+  <!-- Corner Position Squares (Standard QR pattern look) -->
+  <!-- Top Left -->
+  <rect x="75" y="105" width="55" height="55" fill="#090B10" rx="4" />
+  <rect x="85" y="115" width="35" height="35" fill="#FFFFFF" rx="2" />
+  <rect x="92" y="122" width="21" height="21" fill="#E63946" rx="2" />
+  
+  <!-- Top Right -->
+  <rect x="270" y="105" width="55" height="55" fill="#090B10" rx="4" />
+  <rect x="280" y="115" width="35" height="35" fill="#FFFFFF" rx="2" />
+  <rect x="287" y="122" width="21" height="21" fill="#00E5FF" rx="2" />
+  
+  <!-- Bottom Left -->
+  <rect x="75" y="240" width="55" height="55" fill="#090B10" rx="4" />
+  <rect x="85" y="250" width="35" height="35" fill="#FFFFFF" rx="2" />
+  <rect x="92" y="257" width="21" height="21" fill="#D6A84B" rx="2" />
+  
+  <!-- Stylized Data Matrix Dots -->
+  <g fill="#151922">
+    <!-- Row segments -->
+    <rect x="145" y="105" width="10" height="20" rx="2" />
+    <rect x="165" y="105" width="20" height="10" rx="2" />
+    <rect x="195" y="105" width="10" height="30" rx="2" />
+    <rect x="215" y="105" width="30" height="10" rx="2" />
+    <rect x="250" y="115" width="10" height="20" rx="2" />
+    
+    <rect x="145" y="135" width="30" height="10" rx="2" />
+    <rect x="185" y="125" width="20" height="20" rx="2" />
+    <rect x="225" y="125" width="20" height="10" rx="2" />
+    <rect x="215" y="145" width="20" height="20" rx="2" />
+    <rect x="245" y="145" width="15" height="10" rx="2" />
+    
+    <!-- Middle block -->
+    <rect x="75" y="170" width="20" height="10" rx="2" />
+    <rect x="105" y="170" width="15" height="25" rx="2" />
+    <rect x="130" y="160" width="20" height="10" rx="2" />
+    <rect x="140" y="180" width="10" height="30" rx="2" />
+    <rect x="160" y="165" width="25" height="15" rx="2" />
+    
+    <!-- Center badge box -->
+    <rect x="185" y="180" width="30" height="30" rx="6" fill="#090B10" />
+    <polygon points="200,186 210,195 200,204 190,195" fill="#D6A84B" />
+    
+    <rect x="225" y="175" width="20" height="20" rx="2" />
+    <rect x="255" y="165" width="20" height="10" rx="2" />
+    <rect x="285" y="170" width="20" height="20" rx="2" />
+    <rect x="310" y="170" width="15" height="10" rx="2" />
+    
+    <!-- Lower area -->
+    <rect x="140" y="220" width="25" height="10" rx="2" />
+    <rect x="175" y="215" width="15" height="25" rx="2" />
+    <rect x="200" y="220" width="20" height="10" rx="2" />
+    <rect x="230" y="215" width="10" height="25" rx="2" />
+    <rect x="250" y="235" width="30" height="10" rx="2" />
+    <rect x="290" y="210" width="25" height="15" rx="2" />
+    
+    <rect x="140" y="250" width="15" height="20" rx="2" />
+    <rect x="165" y="250" width="30" height="10" rx="2" />
+    <rect x="205" y="245" width="15" height="25" rx="2" />
+    <rect x="230" y="260" width="25" height="15" rx="2" />
+    <rect x="265" y="265" width="20" height="20" rx="2" />
+    <rect x="295" y="250" width="25" height="10" rx="2" />
+    
+    <rect x="140" y="280" width="35" height="10" rx="2" />
+    <rect x="185" y="275" width="20" height="15" rx="2" />
+    <rect x="215" y="280" width="35" height="10" rx="2" />
+    <rect x="260" y="290" width="20" height="5" rx="2" />
+    <rect x="290" y="275" width="25" height="15" rx="2" />
+  </g>
+  
+  <!-- Footer UPI details -->
+  <text x="200" y="340" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#F5F7FA" text-anchor="middle">UPI ID: ironclad@upi</text>
+  <text x="200" y="362" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#39FF88" text-anchor="middle">Accepted on GPay • PhonePe • Paytm • BHIM</text>
+  <text x="200" y="380" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" fill="#A7AFBD" text-anchor="middle">Owner can upload authentic business QR in Admin Panel</text>
+</svg>
+

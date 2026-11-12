@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config/
+Disallow: /includes/
+Disallow: /api/
+
+Sitemap: http://localhost/GamingCafe/sitemap.xml
+
