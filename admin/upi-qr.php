@@ -6,7 +6,7 @@
 
 require_once dirname(__DIR__) . '/config/config.php';
 require_once dirname(__DIR__) . '/includes/auth.php';
-require_admin();
+require_admin_owner();
 
 $admin_user = current_admin();
 $db = get_db();

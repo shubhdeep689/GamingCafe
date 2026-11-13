@@ -89,8 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="mb-4">
-          <div class="d-flex justify-content-between align-items-center">
-            <label for="adminPass" class="form-label">Password</label>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label for="adminPass" class="form-label mb-0">Password</label>
+            <a href="<?= BASE_URL ?>admin/forgot-password.php" class="text-gold small text-decoration-none" style="font-size: 0.78rem;">Forgot Password?</a>
           </div>
           <div class="input-group">
             <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted-iron">
@@ -105,9 +106,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </button>
       </form>
 
-      <div class="mt-4 pt-3 border-top border-secondary border-opacity-25 text-center">
+      <div class="mt-4 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
         <a href="<?= BASE_URL ?>" class="text-muted-iron small text-decoration-none">
-          <i class="bi bi-arrow-left me-1"></i> Return to Public Arena
+          <i class="bi bi-arrow-left me-1"></i> Public Arena
+        </a>
+        <a href="<?= BASE_URL ?>admin/recover.php" class="text-secondary small text-decoration-none" style="font-size: 0.72rem;" title="Developer Emergency Master Key Recovery">
+          <i class="bi bi-shield-lock me-1"></i> Dev Recovery
         </a>
       </div>
     </div>

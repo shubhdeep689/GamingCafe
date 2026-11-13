@@ -144,8 +144,8 @@ $gallery_items = $gallery_stmt->fetchAll();
       <!-- Right Column: Dynamic Business Logo Hero Showcase -->
       <div class="col-lg-5 hero-logo-box">
         <div class="hero-logo-card">
-          <!-- Dynamic Business Logo -->
-          <img src="<?= $brand_logo ?>" alt="<?= e($brand_name) ?> Logo" class="hero-logo-image img-fluid" style="filter: drop-shadow(0 0 35px rgba(214,168,75,0.45));">
+          <!-- Dynamic Business Logo with High Fetch Priority for instant LCP -->
+          <img src="<?= $brand_logo ?>" alt="<?= e($brand_name) ?> Logo" class="hero-logo-image img-fluid" width="340" height="340" fetchpriority="high" decoding="async" style="filter: drop-shadow(0 0 35px rgba(214,168,75,0.45));">
           <div class="mt-4">
             <h4 class="text-gold mb-1 brand-font" style="letter-spacing: 0.15em;"><?= e($brand_short) ?></h4>
             <p class="text-muted-iron small mb-3"><?= e($brand_tagline) ?></p>
@@ -166,10 +166,6 @@ $gallery_items = $gallery_stmt->fetchAll();
           </div>
         </div>
       </div>
-
-    </div>
-  </div>
-</section>
 
     </div>
   </div>
@@ -285,7 +281,7 @@ $gallery_items = $gallery_stmt->fetchAll();
       <div class="col-lg-6">
         <div class="iron-card text-center p-4" style="background: radial-gradient(circle at center, #1B2230 0%, #151922 100%);">
           <!-- Dynamic Brand Logo Crest -->
-          <img src="<?= $brand_logo ?>" alt="<?= e($brand_name) ?> Crest" class="img-fluid mb-4" style="max-height: 140px; filter: drop-shadow(0 0 20px rgba(214,168,75,0.4));">
+          <img src="<?= $brand_logo ?>" alt="<?= e($brand_name) ?> Crest" class="img-fluid mb-4" width="140" height="140" loading="lazy" decoding="async" style="max-height: 140px; filter: drop-shadow(0 0 20px rgba(214,168,75,0.4));">
           <h4 class="text-gold brand-font mb-2">SANCTUARY CODE OF HONOR</h4>
           <p class="text-muted-iron small mb-4">
             Fair play, high fps, respect for opponents, and zero toxic behavior. Everyone from first-timers to esports veterans is welcome.
@@ -635,7 +631,7 @@ $gallery_items = $gallery_stmt->fetchAll();
               
               <div class="position-relative overflow-hidden" style="height: 240px; background: #000;">
                 <?php if ($is_vid): ?>
-                  <video src="<?= e($media_url) ?>" class="w-100 h-100 object-fit-cover" muted preload="metadata"></video>
+                  <video src="<?= e($media_url) ?>" class="w-100 h-100 object-fit-cover" muted preload="none" playsinline></video>
                   <div class="position-absolute top-50 start-50 translate-middle">
                     <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(9,11,16,0.85); border: 2px solid var(--rgb-cyan); color: #00E5FF; box-shadow: 0 0 15px rgba(0,229,255,0.6);">
                       <i class="bi bi-play-fill fs-3" style="margin-left: 2px;"></i>
@@ -645,7 +641,7 @@ $gallery_items = $gallery_stmt->fetchAll();
                     <i class="bi bi-camera-reels me-1"></i> VIDEO
                   </span>
                 <?php else: ?>
-                  <img src="<?= e($poster_url) ?>" alt="<?= e($gItem['title']) ?>" class="w-100 h-100 object-fit-cover" loading="lazy">
+                  <img src="<?= e($poster_url) ?>" alt="<?= e($gItem['title']) ?>" class="w-100 h-100 object-fit-cover" width="400" height="240" loading="lazy" decoding="async">
                   <span class="position-absolute top-3 start-3 badge bg-dark border border-secondary text-gold shadow-sm" style="font-size: 0.65rem;">
                     <i class="bi bi-image me-1"></i> PHOTO
                   </span>
@@ -823,7 +819,7 @@ $gallery_items = $gallery_stmt->fetchAll();
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="document.getElementById('arenaTourVideo').pause()"></button>
       </div>
       <div class="modal-body p-0 bg-black">
-        <video id="arenaTourVideo" src="<?= $brand_video ?>" class="w-100" controls playsinline style="max-height: 70vh; outline: none;"></video>
+        <video id="arenaTourVideo" data-src="<?= $brand_video ?>" preload="none" class="w-100" controls playsinline style="max-height: 70vh; outline: none;"></video>
       </div>
       <div class="modal-footer border-secondary border-opacity-25 py-2 justify-content-between">
         <small class="text-muted-iron"><i class="bi bi-geo-alt text-red me-1"></i> <?= e($brand_address) ?></small>

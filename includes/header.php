@@ -5,6 +5,7 @@
  */
 
 require_once dirname(__DIR__) . '/config/config.php';
+require_once dirname(__DIR__) . '/includes/auth.php';
 
 $page_title = $page_title ?? get_setting('meta_title', 'IRONCLAD GAMING SANCTUARY | Gaming Cafe in Sri Muktsar Sahib');
 $page_desc = $page_desc ?? get_setting('meta_description', 'Visit IRONCLAD GAMING SANCTUARY in Guru Angad Dev Nagar, Sri Muktsar Sahib. Experience esports PC gaming, console lounges, competitive tournaments, and instant online session booking.');
@@ -46,8 +47,13 @@ $canonical_url = BASE_URL . ($current_page === 'index.php' ? '' : $current_page)
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-  <!-- Ironclad Theme CSS -->
-  <link rel="stylesheet" href="<?= ASSETS_URL ?>css/style.css?v=<?= APP_VERSION ?>">
+  <!-- Ironclad Theme CSS (Cache-Busted for Immediate Styling Updates) -->
+  <link rel="stylesheet" href="<?= ASSETS_URL ?>css/style.css?v=<?= APP_VERSION ?>_<?= time() ?>">
+
+  <?php if ($current_page === 'index.php' || $current_page === ''): ?>
+  <!-- Preload LCP Hero Image for Instant Mobile Rendering -->
+  <link rel="preload" as="image" href="<?= get_brand_logo() ?>" fetchpriority="high">
+  <?php endif; ?>
 
   <!-- Favicon using authentic logo -->
   <link rel="icon" type="image/png" href="<?= get_brand_logo() ?>">
@@ -114,74 +120,60 @@ $canonical_url = BASE_URL . ($current_page === 'index.php' ? '' : $current_page)
         <i class="bi bi-list fs-2"></i>
       </button>
 
-      <!-- Streamlined Modern Navigation Links -->
+      <!-- Streamlined Modern Navigation Links (Ultra-Compact Shortened Navbar) -->
       <div class="collapse navbar-collapse" id="ironcladNav">
-        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-1">
+        <ul class="navbar-nav mx-auto mb-3 mb-lg-0 gap-lg-1 align-items-lg-center">
           <li class="nav-item">
             <a class="nav-link <?= $current_page === 'index.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>index.php">
-              <i class="bi bi-house-door me-1 d-none d-xl-inline"></i> Home
+              Home
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link <?= $current_page === 'pricing.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>pricing.php">
-              <i class="bi bi-cpu me-1 d-none d-xl-inline"></i> Stations & Rates
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link <?= $current_page === 'about.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>about.php">
-              About
-            </a>
-          </li>
-          
-          <!-- Explore Dropdown (Neatly gathers secondary pages so navbar stays spacious & sleek) -->
+
+          <!-- Arena Dropdown (Gathers Rigs, Offers, Gallery, and Reviews to keep navbar ultra-short) -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle <?= in_array($current_page, ['experiences.php', 'gallery.php', 'reviews.php', 'offers.php']) ? 'active' : '' ?>" href="#" id="exploreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Explore Arena
+            <a class="nav-link dropdown-toggle <?= in_array($current_page, ['experiences.php', 'offers.php', 'gallery.php', 'reviews.php']) ? 'active' : '' ?>" href="#" id="arenaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Arena
             </a>
-            <ul class="dropdown-menu dropdown-menu-dark iron-dropdown shadow-lg border-secondary border-opacity-25" aria-labelledby="exploreDropdown">
+            <ul class="dropdown-menu dropdown-menu-dark iron-dropdown shadow-lg py-2" aria-labelledby="arenaDropdown">
               <li>
-                <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="<?= BASE_URL ?>index.php#arena-tour">
-                  <i class="bi bi-camera-reels-fill text-cyan"></i>
+                <a class="dropdown-item py-2 d-flex align-items-center gap-2 <?= $current_page === 'experiences.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>experiences.php">
+                  <i class="bi bi-joystick text-cyan fs-5"></i>
                   <div>
-                    <div class="fw-bold text-cyan">Watch Arena Tour</div>
-                    <small class="text-muted d-block" style="font-size: 0.72rem;">Authentic 4K Video Walkthrough</small>
+                    <div class="fw-bold">Rigs &amp; Arena</div>
+                    <small class="text-muted-iron d-block" style="font-size: 0.72rem;">RTX 4080s, PS5 Bays, Racing Sims</small>
                   </div>
                 </a>
               </li>
               <li>
-                <a class="dropdown-item py-2 d-flex align-items-center gap-2 <?= $current_page === 'experiences.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>experiences.php">
-                  <i class="bi bi-joystick text-cyan"></i>
+                <a class="dropdown-item py-2 d-flex align-items-center gap-2 <?= $current_page === 'offers.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>offers.php">
+                  <i class="bi bi-fire text-red fs-5"></i>
                   <div>
-                    <div class="fw-bold">Gaming Experiences</div>
-                    <small class="text-muted d-block" style="font-size: 0.72rem;">PC Arena, VIP Console Bays & VR</small>
+                    <div class="fw-bold d-flex align-items-center">
+                      Special Offers
+                      <span class="badge bg-danger ms-2" style="font-size: 0.65rem; padding: 2px 5px;">HOT</span>
+                    </div>
+                    <small class="text-muted-iron d-block" style="font-size: 0.72rem;">Battle passes, student deals &amp; tournaments</small>
                   </div>
                 </a>
               </li>
               <li>
                 <a class="dropdown-item py-2 d-flex align-items-center gap-2 <?= $current_page === 'gallery.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>gallery.php">
-                  <i class="bi bi-play-btn-fill text-gold"></i>
+                  <i class="bi bi-images text-gold fs-5"></i>
                   <div>
-                    <div class="fw-bold">Arena Gallery & Reels</div>
-                    <small class="text-muted d-block" style="font-size: 0.72rem;">Photos, Setup Views & Gameplay Clips</small>
+                    <div class="fw-bold">Arena Gallery</div>
+                    <small class="text-muted-iron d-block" style="font-size: 0.72rem;">Photos, setup views &amp; video clips</small>
                   </div>
                 </a>
               </li>
               <li>
                 <a class="dropdown-item py-2 d-flex align-items-center gap-2 <?= $current_page === 'reviews.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>reviews.php">
-                  <i class="bi bi-star-fill text-warning"></i>
+                  <i class="bi bi-star-fill text-gold fs-5"></i>
                   <div>
-                    <div class="fw-bold">Player Reviews</div>
-                    <small class="text-muted d-block" style="font-size: 0.72rem;">Community Feedback & Ratings</small>
-                  </div>
-                </a>
-              </li>
-              <li><hr class="dropdown-divider border-secondary border-opacity-25"></li>
-              <li>
-                <a class="dropdown-item py-2 d-flex align-items-center gap-2 <?= $current_page === 'offers.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>offers.php">
-                  <i class="bi bi-fire text-red"></i>
-                  <div>
-                    <div class="fw-bold">Special Offers</div>
-                    <small class="text-muted d-block" style="font-size: 0.72rem;">Battle Pass Discounts & Night Owls</small>
+                    <div class="fw-bold d-flex align-items-center">
+                      Player Reviews
+                      <span class="badge bg-gold text-dark ms-2" style="font-size: 0.65rem; padding: 2px 5px;">4.9★</span>
+                    </div>
+                    <small class="text-muted-iron d-block" style="font-size: 0.72rem;">Gamer feedback &amp; community ratings</small>
                   </div>
                 </a>
               </li>
@@ -189,19 +181,111 @@ $canonical_url = BASE_URL . ($current_page === 'index.php' ? '' : $current_page)
           </li>
 
           <li class="nav-item">
+            <a class="nav-link <?= $current_page === 'pricing.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>pricing.php">
+              Pricing
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <?= $current_page === 'about.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>about.php">
+              About
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link <?= $current_page === 'contact.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>contact.php">
               Contact
             </a>
           </li>
         </ul>
 
-        <!-- Action CTAs: High Contrast, Compact, Esports Aesthetic -->
-        <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
-          <a href="<?= BASE_URL ?>check-booking.php" class="btn btn-iron btn-iron-outline btn-iron-sm" title="Lookup or reschedule your session">
-            <i class="bi bi-ticket-perforated text-gold me-1"></i> Check Booking
-          </a>
-          <a href="<?= BASE_URL ?>book.php" class="btn btn-iron btn-iron-primary btn-iron-sm">
-            <i class="bi bi-controller me-1"></i> Book Station
+        <!-- Action Group: Sleek, High-End Esports Pro Alignment -->
+        <div class="iron-nav-actions d-flex align-items-center gap-2 mt-3 mt-lg-0">
+          <div class="iron-nav-subgroup d-flex align-items-center gap-2">
+            <!-- Check Pass Action Button (Golden Outline & Cyber Accent) -->
+            <a href="<?= BASE_URL ?>check-booking.php" class="iron-pass-btn" title="Lookup or verify your booking pass">
+              <i class="bi bi-ticket-perforated-fill text-gold fs-6"></i>
+              <span>Check Pass</span>
+            </a>
+
+            <!-- Gamer Sign In / Profile Dropdown ("Account List") -->
+            <?php if (is_customer_logged_in()): ?>
+              <div class="dropdown">
+                <button class="iron-account-btn dropdown-toggle border-0" type="button" id="gamerAccountDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Gamer Account Menu">
+                  <span class="pulse-dot"></span>
+                  <i class="bi bi-person-badge-fill text-gold fs-6"></i>
+                  <span><?= e(explode(' ', trim($_SESSION['customer_name'] ?? 'Gamer'))[0]) ?></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end iron-account-dropdown shadow-lg py-2" aria-labelledby="gamerAccountDropdown">
+                  <li class="dropdown-header-box">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <span class="badge bg-gold text-dark font-monospace fw-bold" style="font-size: 0.68rem; letter-spacing: 0.08em;">
+                        <i class="bi bi-patch-check-fill me-1"></i>VERIFIED GAMER
+                      </span>
+                      <span class="badge bg-black text-cyan border border-info font-monospace" style="font-size: 0.68rem;">
+                        ID #<?= (int)($_SESSION['customer_user_id'] ?? 0) ?>
+                      </span>
+                    </div>
+                    <div class="fw-bold text-light brand-font fs-6 text-truncate"><?= e($_SESSION['customer_name'] ?? 'Player') ?></div>
+                    <div class="text-muted-iron mt-1" style="font-size: 0.74rem;">
+                      <i class="bi bi-telephone-fill text-gold me-1"></i> +91 <?= e($_SESSION['customer_phone'] ?? '') ?>
+                    </div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2" href="<?= BASE_URL ?>my-account.php">
+                      <span class="menu-icon-box" style="background: rgba(0,229,255,0.1); border-color: rgba(0,229,255,0.25);"><i class="bi bi-speedometer2 text-cyan"></i></span>
+                      <div>
+                        <div class="fw-bold text-light">My Passes &amp; Bookings</div>
+                        <small class="text-muted-iron d-block" style="font-size: 0.7rem;">Active sessions &amp; receipts</small>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2" href="<?= BASE_URL ?>check-booking.php">
+                      <span class="menu-icon-box" style="background: rgba(214,168,75,0.1); border-color: rgba(214,168,75,0.25);"><i class="bi bi-ticket-perforated-fill text-gold"></i></span>
+                      <div>
+                        <div class="fw-bold text-light">Fast Pass Verification</div>
+                        <small class="text-muted-iron d-block" style="font-size: 0.7rem;">Lookup with reference ID</small>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2" href="<?= BASE_URL ?>book.php">
+                      <span class="menu-icon-box" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.25);"><i class="bi bi-controller text-green"></i></span>
+                      <div>
+                        <div class="fw-bold text-light">Reserve Next Slot</div>
+                        <small class="text-muted-iron d-block" style="font-size: 0.7rem;">Pick PC rig or console bay</small>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2" href="<?= BASE_URL ?>my-account.php#profileModal">
+                      <span class="menu-icon-box" style="background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.25);"><i class="bi bi-gear-fill text-info"></i></span>
+                      <div>
+                        <div class="fw-bold text-light">Account &amp; Security</div>
+                        <small class="text-muted-iron d-block" style="font-size: 0.7rem;">Profile &amp; password change</small>
+                      </div>
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
+                  <li>
+                    <a class="dropdown-item py-2 text-danger" href="<?= BASE_URL ?>logout.php">
+                      <span class="menu-icon-box" style="background: rgba(230,57,70,0.15); border-color: rgba(230,57,70,0.3);"><i class="bi bi-box-arrow-right text-danger"></i></span>
+                      <span class="fw-bold text-danger">Sign Out</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            <?php else: ?>
+              <a href="<?= BASE_URL ?>login.php" class="iron-signin-btn" title="Player Sign In">
+                <i class="bi bi-person-fill text-gold fs-6"></i>
+                <span>Sign In</span>
+              </a>
+            <?php endif; ?>
+          </div>
+
+          <!-- Standout Primary Booking CTA (Solid Golden Glow & Commanding) -->
+          <a href="<?= BASE_URL ?>book.php" class="iron-book-btn" title="Reserve Your Gaming Station">
+            <i class="bi bi-controller fs-5 text-dark"></i>
+            <span>Book Rig</span>
           </a>
         </div>
       </div>

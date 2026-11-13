@@ -42,7 +42,7 @@ define('DB_CHARSET', env('DB_CHARSET', 'utf8mb4'));
 // Brand Identity
 define('APP_NAME', env('APP_NAME', 'IRONCLAD GAMING SANCTUARY'));
 define('APP_TAGLINE', env('APP_TAGLINE', 'Gaming. Competition. Community.'));
-define('APP_VERSION', '1.0.0');
+define('APP_VERSION', '1.2.0');
 define('APP_ADDRESS', env('APP_ADDRESS', 'Behind Redtape Showroom, Near PSPCL Office, Guru Angad Dev Nagar, Sri Muktsar Sahib, Punjab – 152026'));
 define('APP_CITY', env('APP_CITY', 'Sri Muktsar Sahib'));
 define('APP_STATE', env('APP_STATE', 'Punjab'));

@@ -350,17 +350,38 @@ document.addEventListener('DOMContentLoaded', function () {
     updatePricing();
   }
 
-  // Arena Video Tour Modal Pause on Close
+  // Arena Video Tour Modal Lazy-loading & Memory Management (Mobile Optimized)
   const arenaTourModal = document.getElementById('arenaTourModal');
   if (arenaTourModal) {
-    arenaTourModal.addEventListener('hidden.bs.modal', function () {
+    arenaTourModal.addEventListener('show.bs.modal', function () {
       const vid = document.getElementById('arenaTourVideo');
-      if (vid) vid.pause();
+      if (vid && !vid.src && vid.dataset.src) {
+        vid.src = vid.dataset.src;
+        vid.load();
+      }
     });
     arenaTourModal.addEventListener('shown.bs.modal', function () {
       const vid = document.getElementById('arenaTourVideo');
       if (vid) vid.play().catch(() => {});
     });
+    arenaTourModal.addEventListener('hidden.bs.modal', function () {
+      const vid = document.getElementById('arenaTourVideo');
+      if (vid) {
+        vid.pause();
+        vid.removeAttribute('src'); // Instantly free mobile memory buffer
+        vid.load();
+      }
+    });
+
+    // Auto-open Arena Tour modal if URL contains ?tour=1
+    if (window.location.search.includes('tour=1') && typeof bootstrap !== 'undefined') {
+      try {
+        const tourInstance = bootstrap.Modal.getOrCreateInstance(arenaTourModal);
+        setTimeout(function () {
+          tourInstance.show();
+        }, 350);
+      } catch (e) {}
+    }
   }
 });
 

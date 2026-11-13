@@ -95,12 +95,14 @@ try {
         </a>
       </li>
 
-      <!-- 5. Pricing -->
+      <?php if (is_admin_owner()): ?>
+      <!-- 5. Pricing (Owner Only) -->
       <li class="admin-nav-item">
         <a href="<?= BASE_URL ?>admin/pricing.php" class="admin-nav-link <?= $current_admin_page === 'pricing.php' ? 'active' : '' ?>">
           <i class="bi bi-currency-rupee"></i> Pricing & Passes
         </a>
       </li>
+      <?php endif; ?>
 
       <!-- 6. Payments Verification -->
       <li class="admin-nav-item">
@@ -112,17 +114,19 @@ try {
         </a>
       </li>
 
-      <!-- 7. UPI QR Management -->
+      <?php if (is_admin_owner()): ?>
+      <!-- 7. UPI QR Management (Owner Only) -->
       <li class="admin-nav-item">
         <a href="<?= BASE_URL ?>admin/upi-qr.php" class="admin-nav-link <?= $current_admin_page === 'upi-qr.php' ? 'active' : '' ?>">
           <i class="bi bi-qr-code-scan"></i> UPI QR Setup
         </a>
       </li>
+      <?php endif; ?>
 
-      <!-- 8. Customers -->
+      <!-- 8. Customers & Marketing -->
       <li class="admin-nav-item">
         <a href="<?= BASE_URL ?>admin/customers.php" class="admin-nav-link <?= $current_admin_page === 'customers.php' ? 'active' : '' ?>">
-          <i class="bi bi-people"></i> Customers
+          <i class="bi bi-people"></i> Customers & Broadcast
         </a>
       </li>
 
@@ -157,12 +161,21 @@ try {
         </a>
       </li>
 
-      <!-- 13. Website Settings -->
+      <?php if (is_admin_owner()): ?>
+      <!-- 13. Team & Staff Management (Owner Only) -->
+      <li class="admin-nav-item">
+        <a href="<?= BASE_URL ?>admin/users.php" class="admin-nav-link <?= $current_admin_page === 'users.php' ? 'active' : '' ?>">
+          <i class="bi bi-person-gear"></i> Staff & Team
+        </a>
+      </li>
+
+      <!-- 14. Website Settings (Owner Only) -->
       <li class="admin-nav-item">
         <a href="<?= BASE_URL ?>admin/settings.php" class="admin-nav-link <?= $current_admin_page === 'settings.php' ? 'active' : '' ?>">
           <i class="bi bi-gear"></i> Website Settings
         </a>
       </li>
+      <?php endif; ?>
 
       <!-- Activity Logs -->
       <li class="admin-nav-item">

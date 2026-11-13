@@ -494,6 +494,254 @@ $brand_logo    = get_brand_logo();
       font-size: 0.68rem;
     }
 
+    /* Table responsive wrapper */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 14px;
+    }
+
+    /* ===================================================
+       MOBILE RESPONSIVE STYLES (Screen widths <= 680px)
+       Flawless presentation on all mobile devices & tablets
+       =================================================== */
+    @media screen and (max-width: 680px) {
+      body {
+        padding: 10px 8px;
+      }
+
+      .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .action-bar-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .action-bar-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        width: 100%;
+      }
+
+      .action-bar-buttons .btn {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 0.78rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        white-space: nowrap;
+      }
+
+      .receipt-wrapper {
+        padding: 18px 14px;
+        border-radius: 8px;
+        border-width: 1.5px;
+      }
+
+      .receipt-watermark {
+        width: 200px;
+        opacity: 0.03;
+      }
+
+      /* Stack Header vertically */
+      .receipt-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+      }
+
+      .receipt-brand-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .receipt-logo {
+        height: 52px;
+      }
+
+      .brand-title {
+        font-size: 1.25rem;
+      }
+
+      .brand-tagline {
+        font-size: 0.7rem;
+      }
+
+      .brand-address {
+        font-size: 0.7rem;
+        max-width: 100%;
+      }
+
+      .receipt-meta {
+        text-align: left;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 8px 12px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px 8px;
+      }
+
+      .receipt-badge-title {
+        grid-column: 1 / -1;
+        text-align: center;
+        margin-bottom: 4px;
+        font-size: 0.7rem;
+      }
+
+      .receipt-meta-item {
+        font-size: 0.72rem;
+      }
+
+      /* Stack Reference & Status Ribbon */
+      .status-ribbon {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+      }
+
+      .ref-number {
+        font-size: 1.25rem;
+      }
+
+      .status-pill {
+        font-size: 0.74rem;
+        padding: 4px 10px;
+        align-self: flex-start;
+      }
+
+      /* Convert 2-column info grid to 1 vertical stack */
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .info-card {
+        padding: 10px 12px;
+      }
+
+      .spec-row {
+        font-size: 0.76rem;
+      }
+
+      /* Table responsive wrapper & legible typography */
+      .table-wrapper {
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        margin-bottom: 12px;
+      }
+
+      .receipt-table {
+        margin-bottom: 0;
+        min-width: 480px; /* guarantees columns don't crunch together */
+      }
+
+      .receipt-table th {
+        font-size: 0.7rem;
+        padding: 7px 10px;
+      }
+
+      .receipt-table td {
+        font-size: 0.75rem;
+        padding: 7px 10px;
+      }
+
+      /* Total Amount & Payment Bar */
+      .total-bar {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+      }
+
+      .total-amount-box {
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        border-bottom: 1px dashed #cbd5e1;
+        padding-bottom: 8px;
+      }
+
+      .total-value {
+        font-size: 1.4rem;
+      }
+
+      .pay-details {
+        font-size: 0.72rem;
+      }
+
+      /* Guidelines */
+      .guidelines-box {
+        padding: 8px 10px;
+        font-size: 0.7rem;
+        margin-bottom: 12px;
+      }
+
+      /* Receipt Footer */
+      .receipt-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+        padding-top: 10px;
+      }
+
+      .qr-block {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
+      }
+
+      .qr-img {
+        width: 72px;
+        height: 72px;
+      }
+
+      .qr-text {
+        max-width: 100%;
+        font-size: 0.7rem;
+      }
+
+      .stamp-block {
+        text-align: center;
+      }
+    }
+
+    @media screen and (max-width: 420px) {
+      .receipt-meta {
+        grid-template-columns: 1fr;
+      }
+      .action-bar-buttons {
+        grid-template-columns: 1fr;
+      }
+      .receipt-brand-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+
     /* ===================================================
        STRICT 1-PAGE PRINT STYLES
        Guaranteed to fit on exactly 1 single page!
@@ -552,14 +800,14 @@ $brand_logo    = get_brand_logo();
 
   <!-- Screen Action Bar (Hidden when printed) -->
   <div class="action-bar no-print">
-    <div class="d-flex align-items-center gap-2">
+    <div class="action-bar-nav d-flex align-items-center gap-2">
       <a href="<?= BASE_URL ?>check-booking.php?ref=<?= urlencode($booking['booking_ref']) ?>&phone=<?= urlencode($booking['customer_phone']) ?>" class="btn btn-outline-secondary btn-sm text-light">
         <i class="bi bi-arrow-left me-1"></i> Back to Portal
       </a>
       <span class="text-muted-iron small d-none d-sm-inline">Official 1-Page Arena Pass</span>
     </div>
 
-    <div class="d-flex align-items-center gap-2">
+    <div class="action-bar-buttons d-flex align-items-center gap-2">
       <?php if (!$payment || $payment['status'] !== 'verified'): ?>
         <a href="<?= BASE_URL ?>check-booking.php?ref=<?= urlencode($booking['booking_ref']) ?>&pay=razorpay" class="btn btn-warning btn-sm fw-bold text-dark px-3 shadow-sm">
           <i class="bi bi-lightning-charge-fill me-1"></i> Pay Now with Razorpay
@@ -587,7 +835,7 @@ $brand_logo    = get_brand_logo();
       
       <!-- 1. Header with Authentic Logo -->
       <div class="receipt-header">
-        <div class="d-flex align-items-center gap-3">
+        <div class="receipt-brand-box d-flex align-items-center gap-3">
           <img src="<?= $brand_logo ?>" alt="<?= e($brand_name) ?> Logo" class="receipt-logo">
           <div>
             <div class="brand-title brand-font"><?= e($brand_name) ?></div>
@@ -680,35 +928,37 @@ $brand_logo    = get_brand_logo();
       </div>
 
       <!-- 4. Itemized Financial Table -->
-      <table class="receipt-table">
-        <thead>
-          <tr>
-            <th style="width: 50%;">Description / Gaming Service</th>
-            <th class="text-center" style="width: 15%;">Rate / Hr</th>
-            <th class="text-center" style="width: 15%;">Duration</th>
-            <th class="text-end" style="width: 20%;">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <strong>Station Rental: <?= e($booking['station_name']) ?></strong>
-              <div style="font-size: 0.7rem; color: #64748b;">High-refresh esport monitor, RTX gaming rig, mechanical peripherals</div>
-            </td>
-            <td class="text-center">₹<?= number_format((float)$booking['hourly_rate'], 0) ?></td>
-            <td class="text-center"><?= $booking['duration_hours'] ?> Hour(s)</td>
-            <td class="text-end font-monospace">₹<?= number_format((float)$booking['total_amount'], 2) ?></td>
-          </tr>
-          <?php if ((float)$booking['discount_amount'] > 0): ?>
+      <div class="table-wrapper">
+        <table class="receipt-table">
+          <thead>
             <tr>
-              <td><span class="text-success fw-bold">Promotional Discount Applied</span></td>
-              <td class="text-center">-</td>
-              <td class="text-center">-</td>
-              <td class="text-end font-monospace text-success">-₹<?= number_format((float)$booking['discount_amount'], 2) ?></td>
+              <th style="width: 50%;">Description / Gaming Service</th>
+              <th class="text-center" style="width: 15%;">Rate / Hr</th>
+              <th class="text-center" style="width: 15%;">Duration</th>
+              <th class="text-end" style="width: 20%;">Amount</th>
             </tr>
-          <?php endif; ?>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Station Rental: <?= e($booking['station_name']) ?></strong>
+                <div style="font-size: 0.7rem; color: #64748b;">High-refresh esport monitor, RTX gaming rig, mechanical peripherals</div>
+              </td>
+              <td class="text-center">₹<?= number_format((float)$booking['hourly_rate'], 0) ?></td>
+              <td class="text-center"><?= $booking['duration_hours'] ?> Hour(s)</td>
+              <td class="text-end font-monospace">₹<?= number_format((float)$booking['total_amount'], 2) ?></td>
+            </tr>
+            <?php if ((float)$booking['discount_amount'] > 0): ?>
+              <tr>
+                <td><span class="text-success fw-bold">Promotional Discount Applied</span></td>
+                <td class="text-center">-</td>
+                <td class="text-center">-</td>
+                <td class="text-end font-monospace text-success">-₹<?= number_format((float)$booking['discount_amount'], 2) ?></td>
+              </tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
 
       <!-- 5. Payment Details & Total Amount Bar -->
       <div class="total-bar">

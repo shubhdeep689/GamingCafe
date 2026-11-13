@@ -15,6 +15,7 @@ require_once __DIR__ . '/includes/header.php';
 
 $db = get_db();
 $errors = [];
+$logged_user = current_customer();
 
 // Selected station or duration pre-fill from query string
 $preset_station_id = isset($_GET['station_id']) ? (int)$_GET['station_id'] : 0;
@@ -354,34 +355,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
           <!-- Step 3: Player Details -->
           <div class="iron-card p-4">
-            <h4 class="text-gold mb-3 brand-font d-flex align-items-center gap-2">
-              <span class="badge bg-gold text-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">3</span>
-              Player Contact Details
-            </h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="text-gold mb-0 brand-font d-flex align-items-center gap-2">
+                <span class="badge bg-gold text-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">3</span>
+                Player Contact Details
+              </h4>
+              <?php if ($logged_user): ?>
+                <span class="badge bg-dark border border-warning text-gold py-1 px-2 small">
+                  <i class="bi bi-person-check-fill me-1"></i> Logged In: <?= e($logged_user['full_name']) ?>
+                </span>
+              <?php else: ?>
+                <a href="<?= BASE_URL ?>login.php?redirect=<?= urlencode('book.php') ?>" class="text-cyan small text-decoration-none">
+                  <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Auto-Fill
+                </a>
+              <?php endif; ?>
+            </div>
 
             <div class="row g-3">
               <div class="col-md-6">
                 <label for="customerName" class="form-label">Your Full Name <span class="text-danger">*</span></label>
-                <input type="text" name="full_name" id="customerName" class="form-control" placeholder="e.g. Aman Sharma" required>
+                <input type="text" name="full_name" id="customerName" class="form-control" autocomplete="name" placeholder="e.g. Aman Sharma" value="<?= e($logged_user['full_name'] ?? ($_POST['full_name'] ?? '')) ?>" required>
               </div>
 
               <div class="col-md-6">
                 <label for="customerPhone" class="form-label">Mobile Phone Number <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text bg-dark text-muted-iron border-secondary border-opacity-25">+91</span>
-                  <input type="tel" name="phone" id="customerPhone" class="form-control" placeholder="10-digit mobile number" maxlength="10" pattern="[6-9][0-9]{9}" required>
+                  <input type="tel" name="phone" id="customerPhone" class="form-control" autocomplete="tel" inputmode="tel" placeholder="10-digit mobile number" maxlength="10" pattern="[6-9][0-9]{9}" value="<?= e($logged_user['phone'] ?? ($_POST['phone'] ?? '')) ?>" required>
                 </div>
                 <div class="form-text text-muted-iron small">Used for booking status lookups and confirmation SMS/WhatsApp.</div>
               </div>
 
               <div class="col-md-6">
                 <label for="customerEmail" class="form-label">Email Address (Optional)</label>
-                <input type="email" name="email" id="customerEmail" class="form-control" placeholder="yourname@gmail.com">
+                <input type="email" name="email" id="customerEmail" class="form-control" autocomplete="username" spellcheck="false" placeholder="yourname@gmail.com" value="<?= e($logged_user['email'] ?? ($_POST['email'] ?? '')) ?>">
               </div>
 
               <div class="col-md-6">
                 <label for="bookingNotes" class="form-label">Special Requests / Preferred Games (Optional)</label>
-                <input type="text" name="notes" id="bookingNotes" class="form-control" placeholder="e.g. Valorant / FIFA 24 pre-installed">
+                <input type="text" name="notes" id="bookingNotes" class="form-control" placeholder="e.g. Valorant / FIFA 24 pre-installed" value="<?= e($_POST['notes'] ?? '') ?>">
               </div>
             </div>
           </div>

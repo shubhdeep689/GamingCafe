@@ -107,7 +107,7 @@ $footer_brand = get_brand_name();
           &copy; <?= date('Y') ?> <strong><?= e($footer_brand) ?></strong>. All rights reserved. <?= e($footer_city) ?>, <?= e($footer_state) ?>.
         </div>
         <div class="text-muted-iron small text-center text-md-end">
-          <span class="text-secondary">Designed for esports gamers in <?= e($footer_state) ?> &bull; High FPS Rigs &bull; Low Latency LAN</span>
+          <span>Website Made by <strong class="text-gold">shubhdeep689</strong></span>
         </div>
       </div>
     </div>
