@@ -75,7 +75,7 @@ if ($total_revs > 0) {
 ?>
 
 <!-- Page Banner -->
-<section class="py-5 position-relative overflow-hidden" style="background: radial-gradient(circle at 50% 20%, rgba(34, 43, 61, 0.6) 0%, var(--bg-primary) 80%); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-cafe-bg position-relative overflow-hidden" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.45) 0%, rgba(9, 11, 16, 0.20) 50%, rgba(9, 11, 16, 0.50) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg'); border-bottom: 1px solid rgba(214, 168, 75, 0.35);">
   <div class="container py-4 text-center position-relative z-2">
     <span class="section-subtitle">Community Voice</span>
     <h1 class="display-5 fw-bold mt-2">Player Reviews & Ratings</h1>
@@ -85,7 +85,7 @@ if ($total_revs > 0) {
   </div>
 </section>
 
-<section class="py-5">
+<section class="py-5 section-gta6-bg position-relative" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.40) 0%, rgba(9, 11, 16, 0.16) 50%, rgba(9, 11, 16, 0.48) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg');">
   <div class="container py-2">
     
     <?= display_flash() ?>

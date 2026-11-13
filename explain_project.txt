@@ -1,0 +1,331 @@
+================================================================================
+          IRONCLAD GAMING SANCTUARY — COMPLETE PROJECT SPECIFICATION &
+                            DEVELOPMENT ARCHIVE
+================================================================================
+
+Document Version : 2.2.0
+Release Status   : Production Ready / Fully White-Labeled
+Target Platform  : Full-Stack PHP 8.2+ / MariaDB / Apache (XAMPP Environment)
+Project Directory: c:\xampp\htdocs\GamingCafe\
+Default URL      : http://localhost/GamingCafe/
+Admin Portal     : http://localhost/GamingCafe/admin/login.php
+Last Updated     : November 2026
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+ 1. PROJECT EXECUTIVE OVERVIEW
+ 2. SYSTEM ARCHITECTURE & TECHNICAL STACK
+ 3. DATABASE SCHEMA & DATA RELATIONSHIPS
+ 4. CORE FUNCTIONAL MODULES & FEATURES
+    4.1.  Public Arena Website & Customer UI
+    4.2.  Atomic Booking Engine & Collision Prevention
+    4.3.  Hourly Station Timetable & Live Availability Radar
+    4.4.  Customer Portal, Booking Lookup & UPI Verification
+    4.5.  1-Page Print-Ready Digital Receipt & PDF Pass
+    4.6.  Automated WhatsApp Notification System
+    4.7.  Owner / Administrator Control Center
+    4.8.  100% Dynamic White-Label & Rebranding Engine
+    4.9.  Gamer Comfort, Hospitality & Food Policies
+    4.10. Customer Account & Authentication Suite (login.php, register.php, my-account.php)
+    4.11. Admin Customer CRM & Festival / Offer WhatsApp Broadcaster
+    4.12. Contact Inquiries & Automated Lead Generation System
+    4.13. Multi-User Role-Based Access Control (RBAC) & Account Recovery
+    4.14. Atmospheric Cyber & Gaming Cafe Visual Engine (Scroll Visibility & Parallax)
+ 5. PROBLEMS ENCOUNTERED DURING DEVELOPMENT & HOW WE SOLVED THEM
+    5.1. The Midnight-Crossing Double-Booking Bug
+    5.2. SQLSTATE[HY093] Prepared Statement Parameter Binding Error
+    5.3. Multi-Page Receipt Print Spillover
+    5.4. Customer Name Case Inconsistency
+    5.5. Landing Page Video Clutter & Page Weight
+    5.6. Hardcoded Brand Identity Decoupling
+    5.7. Conflicting Food & Beverage Policy on Passes
+    5.8. Session & Config Loading Order in Public Views
+    5.9. Background Image Opacity Crushing Visibility on Scroll
+    5.10. Browser Asset Caching Hiding Immediate Visual Updates
+    5.11. Ambiguous Customer Phone in Joined Booking History Queries
+ 6. SECURITY & RELIABILITY IMPLEMENTATION
+ 7. STEP-BY-STEP DEPLOYMENT & MAINTENANCE GUIDE
+ 8. CONCLUSION & FUTURE ROADMAP
+
+================================================================================
+1. PROJECT EXECUTIVE OVERVIEW
+================================================================================
+Ironclad Gaming Sanctuary is an esports gaming lounge and cafe management 
+platform originally forged for an elite gaming lounge located at:
+  Behind Redtape Showroom, Near PSPCL Office, Guru Angad Dev Nagar,
+  Sri Muktsar Sahib, Punjab – 152026.
+
+The platform has been completely generalized and white-labeled so that any 
+gaming cafe owner anywhere in the world can run, rebrand, and customize the 
+entire application directly from the web-based Administrator Panel without 
+editing any source code.
+
+KEY OBJECTIVES DELIVERED:
+- Provide customers with real-time seat availability and frictionless online booking.
+- Prevent double bookings with zero race conditions (including late-night sessions).
+- Enable seamless Indian UPI payments (GPay, PhonePe, Paytm, BHIM) with automated QR.
+- Dedicated player account suite with mobile/email sign-in, booking history, and dashboard.
+- Admin Customer CRM with 1-click WhatsApp festival/offer mass broadcasting.
+- Contact inquiries inbox with automated lead capture into the customer registry.
+- Role-based admin accounts (Owner, Receptionist/Staff, Developer) with lockout prevention.
+- Immersive atmospheric visual engine with high-visibility cafe and GTA 6 backgrounds.
+- Generate high-impact 1-page printable passes and instant downloadable PDFs.
+- Enable instant WhatsApp messaging with deep links and delivery status tracking.
+- Allow owners to customize Cafe Name, Logo, Tour Video, Hero Headlines, Address,
+  and Amenities in real time.
+- Present gamer-friendly hospitality policies: 4K + QLED screens, cozy aesthetic 
+  ambience, in-house chilled beverages/packed food, and 100% outside food allowed.
+
+================================================================================
+2. SYSTEM ARCHITECTURE & TECHNICAL STACK
+================================================================================
+The application is architected as a lightweight, lightning-fast MVC-lite PHP 
+system designed for zero external bloat, minimal server resource consumption, and 
+maximum portability across standard Apache/PHP/MySQL hosting stacks.
+
+- BACKEND LANGUAGE:
+  Native PHP 8.2+ with strict typing where appropriate, PDO database abstraction,
+  and native session management.
+
+- DATABASE ENGINE:
+  MariaDB 10.4+ / MySQL 8.0+ running with InnoDB engine, full UTF-8 Unicode 
+  collation (utf8mb4_unicode_ci), foreign key constraints, and transactional safety.
+
+- FRONTEND & STYLING:
+  HTML5, CSS3 with modern CSS custom properties (variables), Bootstrap 5.3.3, 
+  Bootstrap Icons 1.11.3, and Google Fonts (Rajdhani for futuristic esports headings 
+  and Segoe UI for readable UI typography).
+
+- DARK ESPORTS AESTHETIC PALETTE:
+  * Primary Dark Background: #090B10 (Abyssal Carbon)
+  * Secondary Surface Card:  #151922 (Forged Slate)
+  * Elevated Dark Surface:   #1E2430 (Midnight Steel)
+  * Championship Gold:       #D6A84B (Trophy Accent)
+  * Illuminated Cyan:        #00E5FF (High-Tech Laser Cyan)
+  * Electric Victory Red:    #E63946 (Competitive Accent)
+  * Success Emerald Green:   #2ECC71 (Active / Verified)
+  * Border Lines:            rgba(255, 255, 255, 0.08)
+
+- CLIENT-SIDE LIBRARIES:
+  * html2pdf.js v0.10.1 (Bundled via CDN for client-side rasterized vector A4 PDF passes).
+  * Chart.js (For dynamic admin esports revenue and station utilization analytics).
+  * Native Vanilla JS (No jQuery dependency for client interactions).
+
+================================================================================
+3. DATABASE SCHEMA & DATA RELATIONSHIPS
+================================================================================
+The normalized relational database `ironclad_gaming` consists of the following 
+primary tables:
+
+1. `station_categories`: PC Battle Rigs, PS5 Console Lounges, Squad LAN Bays.
+2. `stations`: Individual hardware stations, specs, hourly rates, active/maintenance status.
+3. `pricing_plans`: Packaged multi-hour passes (1 Hr, 2 Hrs, 3 Hrs, Full Day Pass).
+4. `special_offers`: Promo codes, percentage or flat discounts, validity dates, min hours.
+5. `customers`: Player directory, full name, phone number, email, hashed password,
+   total bookings, lifetime spend, account creation timestamp.
+6. `bookings`: Master reservations table storing station_id, customer_id, booking_date,
+   start_time, end_time, duration_hours, total_amount, discount_amount, final_amount,
+   booking_status (confirmed, pending_payment, cancelled, completed), reference number.
+7. `payments`: Payment records, amount, payment_method (upi_qr, razorpay, cash), status,
+   transaction_ref (12-digit UTR).
+8. `inquiries`: Customer contact form submissions (name, email, phone, subject, message,
+   status: new/replied/closed, admin_notes, timestamps).
+9. `users`: Administrative user accounts (id, username, email, password_hash, role:
+   super_admin/staff/developer, is_active, last_login).
+10. `reviews`: Customer feedback, ratings (1-5 stars), game played, approval status.
+11. `gallery`: Visual photos and video reels with category tags and display order.
+12. `activity_logs`: Administrative audit trail logging user_id, action, details, IP.
+13. `settings`: Key-value configuration store for dynamic white-label properties.
+
+================================================================================
+4. CORE FUNCTIONAL MODULES & FEATURES
+================================================================================
+
+4.1. PUBLIC ARENA WEBSITE & CUSTOMER UI
+- Clean, compact navigation bar with nested Arena dropdown (PC Rigs, Console Bays,
+  Squad LAN, Visual Gallery) and championship golden action buttons.
+- Real-time station catalog with live rates, specs, and direct booking shortcuts.
+- Responsive mobile layout optimized for smartphones and tablets.
+
+4.2. ATOMIC BOOKING ENGINE & COLLISION PREVENTION
+- Multi-step validation preventing conflicting overlapping reservations on the same station.
+- Transactional integrity using database `SELECT ... FOR UPDATE` row locks.
+- Intelligent handling of multi-hour reservations spanning across standard intervals.
+
+4.3. HOURLY STATION TIMETABLE & LIVE AVAILABILITY RADAR
+- Public and admin visual availability radar checking open slots from 10:00 AM to 11:00 PM.
+- Immediate slot calculation reflecting booked vs open stations in real time via AJAX.
+
+4.4. CUSTOMER PORTAL, BOOKING LOOKUP & UPI VERIFICATION
+- Customer self-service lookup via Booking Reference (e.g. `IC-20261112-9214`) and Phone.
+- Integrated NPCI-compliant UPI QR generator displaying exact payable amount.
+- 12-digit UTR transaction submission with instant staff verification.
+
+4.5. 1-PAGE PRINT-READY DIGITAL RECEIPT & PDF PASS
+- Designed for thermal printers and standard A4 paper with zero multi-page spillover.
+- Embedded QR code verifying pass authenticity on the reception counter scanner.
+- 1-click client-side vector PDF generation via `html2pdf.js`.
+
+4.6. AUTOMATED WHATSAPP NOTIFICATION SYSTEM
+- Instant pre-formatted WhatsApp links with full booking details, start time, station code,
+  and payment status.
+- Delivery status tracking on admin bookings dashboard.
+
+4.7. OWNER / ADMINISTRATOR CONTROL CENTER
+- Interactive analytics dashboard displaying monthly revenue, total hours, and utilization.
+- Station inventory manager, pass pricing editor, and promo code campaign tools.
+- Media manager for uploading video reels and arena photographs.
+
+4.8. 100% DYNAMIC WHITE-LABEL & REBRANDING ENGINE
+- Change Brand Name, City, Address, Tagline, Phone, Email, Crest Logo, and Video Tour
+  from `admin/settings.php` without altering code.
+- Immediate cascade across all views, receipts, and WhatsApp communications.
+
+4.9. GAMER COMFORT, HOSPITALITY & FOOD POLICIES
+- Prominent presentation of gamer hospitality perks: 4K + QLED screens, ambient RGB glow,
+  in-house cold beverage cans (energy drinks, sodas) and packaged snacks.
+- 100% outside food permitted policy highlighted across all public passes and banners.
+
+4.10. CUSTOMER ACCOUNT & AUTHENTICATION SUITE
+- Player Sign-In (`login.php`): Mobile number or email login with password verification.
+- Player Registration (`register.php`): Fast profile setup with 10-digit phone validation.
+- Gamer Dashboard (`my-account.php`): Verified gamer status, active and past bookings,
+  lifetime hours, total spend, and self-service credential updates.
+- Navbar Player Menu: Avatar pill showing name, status, and direct profile shortcuts.
+
+4.11. ADMIN CUSTOMER CRM & FESTIVAL / OFFER WHATSAPP BROADCASTER
+- Centralized customer directory in `admin/customers.php` with contact information and spend.
+- 1-Click WhatsApp Broadcaster: Send pre-typed festival greetings (Diwali, New Year,
+  Eid, Christmas) or promotional offers to all customers with a single click.
+- Filter, search, and CSV export capabilities.
+
+4.12. CONTACT INQUIRIES & AUTOMATED LEAD GENERATION SYSTEM
+- Contact form on `contact.php` storing inquiries in the `inquiries` table.
+- Automatic Lead Capture: Detects customer phone/email and auto-populates new customer records.
+- Admin Inquiries Center (`admin/inquiries.php`): Live unread counters, status toggling,
+  notes, and 1-click WhatsApp replies.
+
+4.13. MULTI-USER ROLE-BASED ACCESS CONTROL (RBAC) & ACCOUNT RECOVERY
+- Super Admin (Owner), Staff (Receptionist), and Developer account hierarchy.
+- Lockout prevention: Staff cannot alter owner passwords or permissions.
+- Email-based password recovery and documented technical developer restoration protocols.
+
+4.14. ATMOSPHERIC CYBER & GAMING CAFE VISUAL ENGINE
+- Dual atmospheric photographic backgrounds: Cafe Interior (`images/cafe_bg.jpeg`) and
+  GTA 6 Cyberpunk Neon Artwork (`images/gta6_bg.jpeg`).
+- High-visibility progressive gradients (center overlay darkness lightened to 0.15–0.25).
+- Real-time scroll listener in `assets/js/main.js` (`requestAnimationFrame`) that lightens
+  the overlay dynamically as players scroll through sections.
+- Elevated glassmorphic cards (`backdrop-filter: blur(14px)`) and dual-layer text shadows.
+- Parallax scrolling on desktop (`min-width: 992px`) with smooth mobile performance.
+- Global deployment across all frontend pages, keeping Hero and Visual Gallery exempt.
+
+================================================================================
+5. PROBLEMS ENCOUNTERED DURING DEVELOPMENT & HOW WE SOLVED THEM
+================================================================================
+
+5.1. THE MIDNIGHT-CROSSING DOUBLE-BOOKING BUG
+- Symptom: A booking starting at 22:30 for 2 hours ends at 00:30 next day. SQL comparison
+  `start_time < new_end AND end_time > new_start` failed due to `00:30 < 22:30`.
+- Solution: Transitioned time clash logic to full ISO datetime stamps (`booking_date + start_time`).
+
+5.2. SQLSTATE[HY093] PARAMETER BINDING ERROR
+- Symptom: Duplicate named placeholders in PDO queries caused statement preparation errors.
+- Solution: Assigned unique named placeholders per clause (`:bdate1`, `:bdate2`).
+
+5.3. MULTI-PAGE RECEIPT PRINT SPILLOVER
+- Symptom: Default print stylesheets pushed receipts onto two pages.
+- Solution: Added strict `@media print` rules setting `@page { size: A4 portrait; margin: 8mm; }`,
+  restricting container heights, and hiding non-essential headers/footers.
+
+5.4. CUSTOMER NAME CASE INCONSISTENCY
+- Symptom: Users typed names in all-lowercase or all-caps.
+- Solution: Created `to_title_case()` sanitizing input to proper Title Case across all forms.
+
+5.5. LANDING PAGE VIDEO CLUTTER & PAGE WEIGHT
+- Symptom: Multiple auto-playing MP4 videos slowed mobile page load speeds.
+- Solution: Restricted hero banner to a single optimized loop; shifted secondary tour video
+  to an on-demand Bootstrap modal with lazy-loading memory disposal.
+
+5.6. HARDCODED BRAND IDENTITY DECOUPLING
+- Symptom: Original Muktsar brand details were hardcoded across multiple views.
+- Solution: Centralized all brand attributes in `settings` table via `get_brand_*()` helpers.
+
+5.7. CONFLICTING FOOD & BEVERAGE POLICY ON PASSES
+- Symptom: Outdated text stated "No outside food allowed", conflicting with cafe policy.
+- Solution: Aligned all receipts, passes, FAQs, and cards to confirm outside food is 100% allowed
+  and in-house chilled beverages & packed snacks are available.
+
+5.8. SESSION & CONFIG LOADING ORDER IN PUBLIC VIEWS
+- Symptom: Calling `session_start()` after output triggered headers already sent warnings.
+- Solution: Standardized `config/config.php` to initialize sessions prior to any output.
+
+5.9. BACKGROUND IMAGE OPACITY CRUSHING VISIBILITY ON SCROLL
+- Symptom: Overlays with 0.88–0.94 black opacity made atmospheric backgrounds virtually invisible.
+- Solution: Lightened gradient overlays to 0.15–0.25 opacity in the center, wrapped text in
+  frosted glass cards (`backdrop-filter: blur(14px)`), and added a dynamic scroll visibility
+  enhancer in `main.js`.
+
+5.10. BROWSER ASSET CACHING HIDING IMMEDIATE VISUAL UPDATES
+- Symptom: Browsers cached CSS and JS files, showing old button colors and styles.
+- Solution: Added automated cache-busting query strings `?v=<?= APP_VERSION ?>_<?= time() ?>`
+  in `header.php` and `footer.php`.
+
+5.11. AMBIGUOUS CUSTOMER PHONE IN JOINED BOOKING HISTORY QUERIES
+- Symptom: `my-account.php` threw SQL column error `b.customer_phone` not found on `bookings`.
+- Solution: Resolved query to `JOIN customers c ON b.customer_id = c.id` and matched against
+  customer ID and phone correctly.
+
+================================================================================
+6. SECURITY & RELIABILITY IMPLEMENTATION
+================================================================================
+1. CSRF DEFENSE: Cryptographic per-session tokens verified on all form submissions.
+2. SQL INJECTION IMMUNITY: 100% parameter binding through PDO prepared statements.
+3. XSS MITIGATION: All output escaped through `e()` wrapper using `htmlspecialchars()`.
+4. PASSWORD CRYPTOGRAPHY: Passwords hashed via `password_hash()` with BCRYPT.
+5. ACCESS CONTROL (RBAC): Super Admin, Staff, and Developer role separation.
+6. AUDIT TRAIL LOGGING: Administrative actions logged with admin ID, timestamp, and IP.
+
+================================================================================
+7. STEP-BY-STEP DEPLOYMENT & MAINTENANCE GUIDE
+================================================================================
+TO RUN ON LOCAL XAMPP:
+1. Ensure Apache and MySQL are running in the XAMPP Control Panel.
+2. Place the project directory in: `C:\xampp\htdocs\GamingCafe\`
+3. Verify the database `ironclad_gaming` exists in phpMyAdmin (`http://localhost/phpmyadmin/`).
+4. Import `database/schema.sql` and run any pending migrations:
+   - `http://localhost/GamingCafe/database/migrate_customers.php`
+   - `http://localhost/GamingCafe/database/migrate_inquiries.php`
+5. Database connection settings are in `config/database.php` and `.env`:
+   Host `127.0.0.1`, User `root`, Password `` (empty).
+6. Open in browser:
+   - Public Website: `http://localhost/GamingCafe/`
+   - Player Login:   `http://localhost/GamingCafe/login.php`
+   - Admin Panel:    `http://localhost/GamingCafe/admin/login.php`
+   - Default Owner Login Credentials:
+     Username: `admin`
+     Password: `IroncladAdmin2026!`
+7. To rebrand for another cafe:
+   - Navigate to **Website Settings** (`admin/settings.php`).
+   - Update cafe details, upload custom logo/video, and click **Save & Apply**.
+
+================================================================================
+8. CONCLUSION & FUTURE ROADMAP
+================================================================================
+Ironclad Gaming Sanctuary represents a battle-tested, production-ready esports cafe 
+management ecosystem bridging customer self-service booking, player accounts, instant 
+UPI payment verification, automated lead capture, and counter operations.
+
+RECOMMENDED FUTURE ENHANCEMENTS:
+- Automated WhatsApp Business API integration (via Twilio or Meta Cloud API) for 
+  headless background message dispatching.
+- Hardware station timer integration via IoT / local client agent to automatically 
+  lock/unlock PC screens based on booking session times.
+- Customer loyalty points & battle pass tier progression engine.
+- Tournament bracket builder for in-house LAN competitions.
+
+================================================================================
+                            END OF SPECIFICATION FILE
+================================================================================
+

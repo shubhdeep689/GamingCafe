@@ -4,6 +4,9 @@ Disallow: /admin/
 Disallow: /config/
 Disallow: /includes/
 Disallow: /api/
+Disallow: /database/
+Disallow: /my-account.php
+Disallow: /receipt.php
+Disallow: /logout.php
 
 Sitemap: http://localhost/GamingCafe/sitemap.xml
-

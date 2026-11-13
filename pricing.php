@@ -28,7 +28,7 @@ $stations = $db->query("
 ?>
 
 <!-- Page Banner -->
-<section class="py-5 position-relative overflow-hidden" style="background: radial-gradient(circle at 50% 20%, rgba(34, 43, 61, 0.6) 0%, var(--bg-primary) 80%); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-gta6-bg position-relative overflow-hidden" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.45) 0%, rgba(9, 11, 16, 0.18) 50%, rgba(9, 11, 16, 0.50) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); border-bottom: 1px solid rgba(0, 229, 255, 0.35);">
   <div class="container py-4 text-center position-relative z-2">
     <span class="section-subtitle">Fair & Transparent Rates</span>
     <h1 class="display-5 fw-bold mt-2">Arena Pricing & Passes</h1>
@@ -39,7 +39,7 @@ $stations = $db->query("
 </section>
 
 <!-- Pricing Plans Grid -->
-<section class="py-5">
+<section class="py-5 section-cafe-bg position-relative" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg'); border-bottom: 1px solid rgba(214, 168, 75, 0.35);">
   <div class="container py-4">
     <div class="row g-4 justify-content-center">
       <?php if (!empty($plans)): ?>
@@ -88,7 +88,7 @@ $stations = $db->query("
 </section>
 
 <!-- Station-wise Rate Table -->
-<section class="py-5" style="background: rgba(21, 25, 34, 0.4); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-gta6-bg position-relative" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.40) 0%, rgba(9, 11, 16, 0.16) 50%, rgba(9, 11, 16, 0.48) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); border-top: 1px solid rgba(0, 229, 255, 0.35); border-bottom: 1px solid rgba(214, 168, 75, 0.3);">
   <div class="container py-4">
     <div class="text-center mb-5">
       <span class="section-subtitle">Station Breakdown</span>
@@ -99,7 +99,7 @@ $stations = $db->query("
     </div>
 
     <div class="table-responsive">
-      <table class="table table-dark table-hover border border-secondary border-opacity-25 rounded-3 align-middle">
+      <table class="table table-dark table-hover border border-secondary border-opacity-25 rounded-3 align-middle" style="background: rgba(13, 17, 24, 0.85); backdrop-filter: blur(14px);">
         <thead>
           <tr class="text-gold" style="background: rgba(214,168,75,0.08);">
             <th class="py-3 px-4">Station Name</th>
@@ -124,7 +124,7 @@ $stations = $db->query("
 </section>
 
 <!-- Pricing FAQs -->
-<section class="py-5">
+<section class="py-5 section-cafe-bg position-relative" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg'); border-top: 1px solid rgba(214, 168, 75, 0.35);">
   <div class="container py-4">
     <div class="text-center mb-5">
       <span class="section-subtitle">Got Questions?</span>
@@ -133,7 +133,7 @@ $stations = $db->query("
 
     <div class="row g-4 justify-content-center">
       <div class="col-lg-8">
-        <div class="accordion accordion-flush" id="pricingFaq">
+        <div class="accordion accordion-flush iron-card p-4" id="pricingFaq" style="background: rgba(13, 17, 24, 0.85) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);">
           
           <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-25 mb-3">
             <h2 class="accordion-header">

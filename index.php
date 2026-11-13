@@ -172,9 +172,9 @@ $gallery_items = $gallery_stmt->fetchAll();
 </section>
 
 <!-- =================================================================
-     SECTION 2: GAMING EXPERIENCES OVERVIEW
+     SECTION 2: GAMING EXPERIENCES OVERVIEW (Immersive Cafe Background)
      ================================================================= -->
-<section class="py-5" id="experiences">
+<section class="py-5 section-cafe-bg position-relative" id="experiences" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg');">
   <div class="container py-4">
     <div class="text-center mb-5">
       <span class="section-subtitle">What We Offer</span>
@@ -237,56 +237,58 @@ $gallery_items = $gallery_stmt->fetchAll();
 </section>
 
 <!-- =================================================================
-     SECTION 3: ABOUT THE SANCTUARY
+     SECTION 3: ABOUT THE SANCTUARY (GTA VI Cyber Vibe Background)
      ================================================================= -->
-<section class="py-5" style="background: rgba(21, 25, 34, 0.4); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-gta6-bg position-relative" id="sanctuary-mission" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.38) 0%, rgba(9, 11, 16, 0.15) 50%, rgba(9, 11, 16, 0.42) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg');">
   <div class="container py-4">
-    <div class="row align-items-center g-5">
+    <div class="row align-items-stretch g-5">
       <div class="col-lg-6">
-        <span class="section-subtitle">Our Mission</span>
-        <h2 class="display-6 fw-bold mt-2">A True Gaming Sanctuary in <?= e($brand_city) ?></h2>
-        <p class="text-muted-iron mt-3">
-          Founded with a clear vision: <strong><?= e($brand_tagline) ?></strong>
-        </p>
-        <p class="text-muted-iron">
-          <?= e($brand_short) ?> is not just a cafe with computers—it is an authentic esports hub where gamers in <?= e($brand_city) ?> and surrounding areas can play at peak competitive performance, meet like-minded players, and experience the highest standards of gaming hardware and ambience.
-        </p>
-        <div class="row g-3 mt-3">
-          <div class="col-sm-6">
-            <div class="d-flex align-items-start gap-3">
-              <i class="bi bi-shield-check text-gold fs-4"></i>
-              <div>
-                <h5 class="mb-1 text-gold">Clean & Sanitized</h5>
-                <p class="text-muted-iron small mb-0">Sanitized gear and ergonomic chairs for long comfortable play.</p>
+        <div class="iron-card p-4 p-md-5 h-100" style="background: rgba(13, 17, 24, 0.82) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(0, 229, 255, 0.3) !important; box-shadow: 0 14px 35px rgba(0, 0, 0, 0.75) !important;">
+          <span class="section-subtitle">Our Mission</span>
+          <h2 class="display-6 fw-bold mt-2 text-white">A True Gaming Sanctuary in <?= e($brand_city) ?></h2>
+          <p class="text-light text-opacity-75 mt-3">
+            Founded with a clear vision: <strong class="text-gold"><?= e($brand_tagline) ?></strong>
+          </p>
+          <p class="text-light text-opacity-75">
+            <?= e($brand_short) ?> is not just a cafe with computers—it is an authentic esports hub where gamers in <?= e($brand_city) ?> and surrounding areas can play at peak competitive performance, meet like-minded players, and experience the highest standards of gaming hardware and ambience.
+          </p>
+          <div class="row g-3 mt-3">
+            <div class="col-sm-6">
+              <div class="d-flex align-items-start gap-3">
+                <i class="bi bi-shield-check text-gold fs-4"></i>
+                <div>
+                  <h5 class="mb-1 text-gold">Clean & Sanitized</h5>
+                  <p class="text-light text-opacity-75 small mb-0">Sanitized gear and ergonomic chairs for long comfortable play.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="d-flex align-items-start gap-3">
+                <i class="bi bi-lightning-charge text-cyan fs-4"></i>
+                <div>
+                  <h5 class="mb-1 text-cyan">Low-Latency Network</h5>
+                  <p class="text-light text-opacity-75 small mb-0">Dedicated high-speed fiber backhaul with uninterrupted power backup.</p>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
-            <div class="d-flex align-items-start gap-3">
-              <i class="bi bi-lightning-charge text-cyan fs-4"></i>
-              <div>
-                <h5 class="mb-1 text-cyan">Low-Latency Network</h5>
-                <p class="text-muted-iron small mb-0">Dedicated high-speed fiber backhaul with uninterrupted power backup.</p>
-              </div>
-            </div>
+          <div class="mt-4">
+            <a href="<?= BASE_URL ?>about.php" class="btn btn-iron btn-iron-outline btn-iron-sm">
+              Read Our Full Story <i class="bi bi-arrow-right ms-1"></i>
+            </a>
           </div>
-        </div>
-        <div class="mt-4">
-          <a href="<?= BASE_URL ?>about.php" class="btn btn-iron btn-iron-outline btn-iron-sm">
-            Read Our Full Story <i class="bi bi-arrow-right ms-1"></i>
-          </a>
         </div>
       </div>
 
       <div class="col-lg-6">
-        <div class="iron-card text-center p-4" style="background: radial-gradient(circle at center, #1B2230 0%, #151922 100%);">
+        <div class="iron-card text-center p-4 h-100" style="background: rgba(13, 17, 24, 0.85) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(214, 168, 75, 0.35) !important; box-shadow: 0 14px 35px rgba(0, 0, 0, 0.75) !important;">
           <!-- Dynamic Brand Logo Crest -->
           <img src="<?= $brand_logo ?>" alt="<?= e($brand_name) ?> Crest" class="img-fluid mb-4" width="140" height="140" loading="lazy" decoding="async" style="max-height: 140px; filter: drop-shadow(0 0 20px rgba(214,168,75,0.4));">
           <h4 class="text-gold brand-font mb-2">SANCTUARY CODE OF HONOR</h4>
-          <p class="text-muted-iron small mb-4">
+          <p class="text-light text-opacity-75 small mb-4">
             Fair play, high fps, respect for opponents, and zero toxic behavior. Everyone from first-timers to esports veterans is welcome.
           </p>
-          <div class="p-3 rounded text-start" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);">
+          <div class="p-3 rounded text-start" style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.1);">
             <div class="d-flex justify-content-between small text-muted-iron mb-2">
               <span><i class="bi bi-geo-alt text-red me-1"></i> Location:</span>
               <span class="text-light text-end"><?= e($brand_city) ?>, <?= e($brand_state) ?></span>
@@ -325,7 +327,7 @@ $gallery_items = $gallery_stmt->fetchAll();
 <!-- =================================================================
      SECTION: ARENA AMENITIES & GAMER PERKS (4K/QLED, Ambience, Food & Drinks)
      ================================================================= -->
-<section class="py-5 position-relative overflow-hidden" id="amenities" style="background: linear-gradient(180deg, rgba(9,11,16,0.85) 0%, rgba(21,25,34,0.95) 50%, rgba(9,11,16,0.85) 100%); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-gta6-bg position-relative overflow-hidden" id="amenities" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.40) 0%, rgba(9, 11, 16, 0.16) 50%, rgba(9, 11, 16, 0.48) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); border-top: 1px solid rgba(0, 229, 255, 0.3); border-bottom: 1px solid rgba(214, 168, 75, 0.3);">
   <div class="container py-4">
     <div class="text-center mb-5">
       <span class="section-subtitle">Comfort &amp; Hospitality</span>
@@ -338,7 +340,7 @@ $gallery_items = $gallery_stmt->fetchAll();
     <div class="row g-4">
       <!-- Perk 1: 4K + QLED Screens -->
       <div class="col-lg-3 col-md-6">
-        <div class="iron-card h-100 p-4 position-relative overflow-hidden" style="border: 1px solid rgba(0, 229, 255, 0.35); background: radial-gradient(circle at top left, rgba(0, 229, 255, 0.08) 0%, rgba(21, 25, 34, 0.95) 70%);">
+        <div class="iron-card h-100 p-4 position-relative overflow-hidden" style="border: 1px solid rgba(0, 229, 255, 0.35); background: rgba(13, 17, 24, 0.82) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="feature-icon-box text-cyan mb-0" style="width: 52px; height: 52px; font-size: 1.5rem; background: rgba(0, 229, 255, 0.12); border-color: rgba(0, 229, 255, 0.4);">
               <i class="bi bi-tv-fill"></i>
@@ -354,7 +356,7 @@ $gallery_items = $gallery_stmt->fetchAll();
 
       <!-- Perk 2: Cozy & Aesthetic Ambience -->
       <div class="col-lg-3 col-md-6">
-        <div class="iron-card h-100 p-4 position-relative overflow-hidden" style="border: 1px solid rgba(214, 168, 75, 0.35); background: radial-gradient(circle at top left, rgba(214, 168, 75, 0.08) 0%, rgba(21, 25, 34, 0.95) 70%);">
+        <div class="iron-card h-100 p-4 position-relative overflow-hidden" style="border: 1px solid rgba(214, 168, 75, 0.35); background: rgba(13, 17, 24, 0.82) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="feature-icon-box text-gold mb-0" style="width: 52px; height: 52px; font-size: 1.5rem; background: rgba(214, 168, 75, 0.12); border-color: rgba(214, 168, 75, 0.4);">
               <i class="bi bi-stars"></i>
@@ -370,7 +372,7 @@ $gallery_items = $gallery_stmt->fetchAll();
 
       <!-- Perk 3: Beverage Cans & Packed Food Available -->
       <div class="col-lg-3 col-md-6">
-        <div class="iron-card h-100 p-4 position-relative overflow-hidden" style="border: 1px solid rgba(230, 57, 70, 0.35); background: radial-gradient(circle at top left, rgba(230, 57, 70, 0.08) 0%, rgba(21, 25, 34, 0.95) 70%);">
+        <div class="iron-card h-100 p-4 position-relative overflow-hidden" style="border: 1px solid rgba(230, 57, 70, 0.35); background: rgba(13, 17, 24, 0.82) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="feature-icon-box text-red mb-0" style="width: 52px; height: 52px; font-size: 1.5rem; background: rgba(230, 57, 70, 0.12); border-color: rgba(230, 57, 70, 0.4);">
               <i class="bi bi-cup-straw"></i>
@@ -386,7 +388,7 @@ $gallery_items = $gallery_stmt->fetchAll();
 
       <!-- Perk 4: Outside Food is Also Allowed -->
       <div class="col-lg-3 col-md-6">
-        <div class="iron-card h-100 p-4 position-relative overflow-hidden" style="border: 1px solid rgba(46, 204, 113, 0.4); background: radial-gradient(circle at top left, rgba(46, 204, 113, 0.08) 0%, rgba(21, 25, 34, 0.95) 70%);">
+        <div class="iron-card h-100 p-4 position-relative overflow-hidden" style="border: 1px solid rgba(46, 204, 113, 0.4); background: rgba(13, 17, 24, 0.82) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="feature-icon-box text-green mb-0" style="width: 52px; height: 52px; font-size: 1.5rem; background: rgba(46, 204, 113, 0.12); border-color: rgba(46, 204, 113, 0.4);">
               <i class="bi bi-bag-check-fill"></i>
@@ -406,7 +408,7 @@ $gallery_items = $gallery_stmt->fetchAll();
 <!-- =================================================================
      SECTION 4: GAMING STATIONS OVERVIEW
      ================================================================= -->
-<section class="py-5">
+<section class="py-5 section-cafe-bg position-relative" id="stations" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg');">
   <div class="container py-4">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4">
       <div>
@@ -468,7 +470,7 @@ $gallery_items = $gallery_stmt->fetchAll();
 <!-- =================================================================
      SECTION 5: PRICING PREVIEW
      ================================================================= -->
-<section class="py-5" style="background: rgba(21, 25, 34, 0.4); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-gta6-bg position-relative" id="pricing" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.38) 0%, rgba(9, 11, 16, 0.15) 50%, rgba(9, 11, 16, 0.45) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); border-top: 1px solid rgba(0, 229, 255, 0.3); border-bottom: 1px solid rgba(214, 168, 75, 0.3);">
   <div class="container py-4">
     <div class="text-center mb-5">
       <span class="section-subtitle">Honest Pricing</span>
@@ -534,9 +536,9 @@ $gallery_items = $gallery_stmt->fetchAll();
      SECTION 6: SPECIAL OFFERS
      ================================================================= -->
 <?php if (!empty($active_offers)): ?>
-<section class="py-5">
+<section class="py-5 section-cafe-bg position-relative" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg'); border-top: 1px solid rgba(214, 168, 75, 0.35); border-bottom: 1px solid rgba(214, 168, 75, 0.25);">
   <div class="container py-2">
-    <div class="iron-card p-4 p-md-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(27,34,48,0.95) 0%, rgba(21,25,34,0.95) 100%); border: 1px solid rgba(214,168,75,0.4);">
+    <div class="iron-card p-4 p-md-5 position-relative overflow-hidden" style="background: rgba(13, 17, 24, 0.85) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(214,168,75,0.4);">
       <div class="row align-items-center g-4">
         <div class="col-lg-8">
           <span class="badge bg-danger mb-2 text-uppercase fw-bold letter-spacing-1">Limited Time Arena Promo</span>
@@ -566,9 +568,9 @@ $gallery_items = $gallery_stmt->fetchAll();
 <!-- =================================================================
      SECTION 7: BOOKING CALL TO ACTION
      ================================================================= -->
-<section class="py-5 position-relative text-center">
+<section class="py-5 section-gta6-bg position-relative text-center" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.40) 0%, rgba(9, 11, 16, 0.16) 50%, rgba(9, 11, 16, 0.48) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); border-top: 1px solid rgba(0, 229, 255, 0.35); border-bottom: 1px solid rgba(214, 168, 75, 0.3);">
   <div class="container py-4">
-    <div class="p-5 rounded-4 position-relative overflow-hidden" style="background: radial-gradient(circle at center, rgba(34, 43, 61, 0.9) 0%, #090B10 100%); border: 1px solid var(--border-color);">
+    <div class="p-5 rounded-4 position-relative overflow-hidden" style="background: rgba(13, 17, 24, 0.82) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(0, 229, 255, 0.3); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);">
       <div class="ambient-glow-wrapper" aria-hidden="true">
         <div class="glow-orb glow-orb-purple" style="width: 300px; height: 300px; top: -50px; left: 10%;"></div>
         <div class="glow-orb glow-orb-cyan" style="width: 300px; height: 300px; bottom: -50px; right: 10%;"></div>
@@ -680,7 +682,7 @@ $gallery_items = $gallery_stmt->fetchAll();
 <!-- =================================================================
      SECTION 9: CUSTOMER REVIEWS
      ================================================================= -->
-<section class="py-5" style="background: rgba(21, 25, 34, 0.4); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-cafe-bg position-relative" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg'); border-top: 1px solid rgba(214, 168, 75, 0.35); border-bottom: 1px solid rgba(214, 168, 75, 0.25);">
   <div class="container py-4">
     <div class="text-center mb-5">
       <span class="section-subtitle">Verified Feedback</span>
@@ -731,9 +733,9 @@ $gallery_items = $gallery_stmt->fetchAll();
 </section>
 
 <!-- =================================================================
-     SECTION 9: LOCATION & DIRECTIONS
+     SECTION 10: LOCATION & DIRECTIONS
      ================================================================= -->
-<section class="py-5" id="location">
+<section class="py-5 section-gta6-bg position-relative" id="location" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.40) 0%, rgba(9, 11, 16, 0.16) 50%, rgba(9, 11, 16, 0.48) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); border-top: 1px solid rgba(0, 229, 255, 0.35);">
   <div class="container py-4">
     <div class="row g-5 align-items-center">
       <div class="col-lg-5">
@@ -743,7 +745,7 @@ $gallery_items = $gallery_stmt->fetchAll();
           Centrally located in <?= e($brand_city) ?>, easy to reach with convenient parking for bikes and cars.
         </p>
 
-        <div class="iron-card p-4 mb-3">
+        <div class="iron-card p-4 mb-3" style="background: rgba(13, 17, 24, 0.85) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);">
           <div class="d-flex align-items-start gap-3 mb-3">
             <div class="feature-icon-box text-red mb-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
               <i class="bi bi-geo-alt-fill"></i>

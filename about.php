@@ -21,7 +21,7 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <!-- Page Header Banner -->
-<section class="py-5 position-relative overflow-hidden" style="background: radial-gradient(circle at 50% 20%, rgba(34, 43, 61, 0.6) 0%, var(--bg-primary) 80%); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-gta6-bg position-relative overflow-hidden" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.45) 0%, rgba(9, 11, 16, 0.18) 50%, rgba(9, 11, 16, 0.50) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); border-bottom: 1px solid rgba(0, 229, 255, 0.35);">
   <div class="container py-4 text-center position-relative z-2">
     <span class="section-subtitle">Our Heritage</span>
     <h1 class="display-5 fw-bold mt-2">About The Sanctuary</h1>
@@ -89,7 +89,7 @@ require_once __DIR__ . '/includes/header.php';
 </section>
 
 <!-- The Three Pillars of Ironclad -->
-<section class="py-5" style="background: rgba(21, 25, 34, 0.4); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-cafe-bg position-relative" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg'); border-top: 1px solid rgba(214, 168, 75, 0.35); border-bottom: 1px solid rgba(214, 168, 75, 0.25);">
   <div class="container py-4">
     <div class="text-center mb-5">
       <span class="section-subtitle">Our Core Values</span>
@@ -137,7 +137,7 @@ require_once __DIR__ . '/includes/header.php';
 </section>
 
 <!-- Gamer Comfort & Hospitality Amenities -->
-<section class="py-5" style="border-bottom: 1px solid var(--border-color);">
+<section class="py-5 section-gta6-bg position-relative" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.40) 0%, rgba(9, 11, 16, 0.16) 50%, rgba(9, 11, 16, 0.48) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); border-bottom: 1px solid rgba(214, 168, 75, 0.3);">
   <div class="container py-4">
     <div class="text-center mb-5">
       <span class="section-subtitle">Comfort &amp; Hospitality</span>
@@ -192,7 +192,7 @@ require_once __DIR__ . '/includes/header.php';
 </section>
 
 <!-- Call to action -->
-<section class="py-5 text-center">
+<section class="py-5 section-cafe-bg position-relative text-center" data-bg-url="<?= BASE_URL ?>images/cafe_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('<?= BASE_URL ?>images/cafe_bg.jpeg'); border-top: 1px solid rgba(214, 168, 75, 0.35);">
   <div class="container py-4">
     <h2 class="display-6 fw-bold mb-3">Ready to Join the Arena?</h2>
     <p class="text-muted-iron mx-auto mb-4" style="max-width: 550px;">

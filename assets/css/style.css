@@ -1395,4 +1395,81 @@ a.iron-book-btn:active {
   border-color: var(--gold) !important;
 }
 
+/* ==========================================================================
+   IMMERSIVE ATMOSPHERIC SECTION BACKGROUNDS (Cafe Interior & GTA VI Gaming Vibe)
+   ========================================================================== */
+.section-cafe-bg {
+  position: relative;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-top: 1px solid rgba(214, 168, 75, 0.40);
+  border-bottom: 1px solid rgba(214, 168, 75, 0.30);
+  overflow: hidden;
+  background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.50) 0%, rgba(9, 11, 16, 0.25) 50%, rgba(9, 11, 16, 0.55) 100%), url('../../images/cafe_bg.jpeg');
+  transition: background-image 0.25s ease-out;
+}
+
+.section-gta6-bg {
+  position: relative;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-top: 1px solid rgba(0, 229, 255, 0.40);
+  border-bottom: 1px solid rgba(214, 168, 75, 0.30);
+  overflow: hidden;
+  background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.38) 0%, rgba(9, 11, 16, 0.15) 50%, rgba(9, 11, 16, 0.45) 100%), url('../../images/gta6_bg.jpeg');
+  transition: background-image 0.25s ease-out;
+}
+
+@media (min-width: 992px) {
+  .section-cafe-bg,
+  .section-gta6-bg {
+    background-attachment: fixed;
+  }
+}
+
+/* Text & Headings Readability on Clear Atmospheric Photographic Backgrounds */
+.section-cafe-bg .section-subtitle,
+.section-gta6-bg .section-subtitle {
+  background: rgba(9, 11, 16, 0.85);
+  border: 1px solid rgba(214, 168, 75, 0.5);
+  padding: 5px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.section-cafe-bg h2,
+.section-gta6-bg h2 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.98), 0 0 32px rgba(0, 0, 0, 0.9) !important;
+}
+
+.section-cafe-bg p.text-muted-iron,
+.section-gta6-bg p.text-muted-iron {
+  color: #dbe4f0 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Elevated Glassmorphism on Photographic Backgrounds */
+.section-cafe-bg .iron-card,
+.section-gta6-bg .iron-card {
+  background: rgba(13, 17, 24, 0.82) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.75) !important;
+}
+
+.section-cafe-bg .iron-card:hover,
+.section-gta6-bg .iron-card:hover {
+  background: rgba(18, 24, 36, 0.92) !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85), 0 0 30px rgba(214, 168, 75, 0.35) !important;
+  transform: translateY(-5px) !important;
+}
+
 

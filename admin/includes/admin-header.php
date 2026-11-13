@@ -18,10 +18,12 @@ $db = get_db();
 $pending_pay_count = 0;
 $pending_rev_count = 0;
 $pending_wa_badge_count = 0;
+$pending_inquiry_count = 0;
 try {
     $pending_pay_count = (int)$db->query("SELECT COUNT(*) FROM payments WHERE status = 'pending'")->fetchColumn();
     $pending_rev_count = (int)$db->query("SELECT COUNT(*) FROM reviews WHERE is_approved = 0")->fetchColumn();
     $pending_wa_badge_count = (int)$db->query("SELECT COUNT(*) FROM bookings WHERE whatsapp_status = 'pending'")->fetchColumn();
+    $pending_inquiry_count = (int)$db->query("SELECT COUNT(*) FROM inquiries WHERE status = 'unread'")->fetchColumn();
 } catch (Exception $e) {
     // Graceful fallback
 }
@@ -127,6 +129,16 @@ try {
       <li class="admin-nav-item">
         <a href="<?= BASE_URL ?>admin/customers.php" class="admin-nav-link <?= $current_admin_page === 'customers.php' ? 'active' : '' ?>">
           <i class="bi bi-people"></i> Customers & Broadcast
+        </a>
+      </li>
+
+      <!-- 9. Inquiries & Contact Messages -->
+      <li class="admin-nav-item">
+        <a href="<?= BASE_URL ?>admin/inquiries.php" class="admin-nav-link <?= $current_admin_page === 'inquiries.php' ? 'active' : '' ?>">
+          <i class="bi bi-chat-left-dots"></i> Inquiries &amp; Messages
+          <?php if ($pending_inquiry_count > 0): ?>
+            <span class="badge bg-danger admin-nav-badge" title="<?= $pending_inquiry_count ?> unread inquiry message(s)"><?= $pending_inquiry_count ?></span>
+          <?php endif; ?>
         </a>
       </li>
 

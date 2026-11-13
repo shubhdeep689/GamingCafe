@@ -96,7 +96,7 @@ $page_title = 'Player Dashboard | ' . get_brand_short();
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<section class="py-5">
+<section class="py-5 section-gta6-bg position-relative" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.40) 0%, rgba(9, 11, 16, 0.16) 50%, rgba(9, 11, 16, 0.48) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg'); min-height: 85vh;">
   <div class="container py-3">
 
     <!-- Flash Messages -->

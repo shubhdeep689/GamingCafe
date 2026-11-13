@@ -36,12 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<section class="py-5" style="min-height: 80vh; display: flex; align-items: center;">
+<section class="py-5 section-gta6-bg position-relative" data-bg-url="<?= BASE_URL ?>images/gta6_bg.jpeg" style="min-height: 85vh; display: flex; align-items: center; background-image: linear-gradient(180deg, rgba(9, 11, 16, 0.45) 0%, rgba(9, 11, 16, 0.18) 50%, rgba(9, 11, 16, 0.50) 100%), url('<?= BASE_URL ?>images/gta6_bg.jpeg');">
   <div class="container py-4">
     <div class="row justify-content-center">
       <div class="col-lg-5 col-md-8 col-sm-11">
         
-        <div class="iron-card p-4 p-md-5 position-relative shadow-lg" style="background: radial-gradient(circle at top, #1A212E 0%, #11151E 100%); border: 1px solid var(--border-color);">
+        <div class="iron-card p-4 p-md-5 position-relative shadow-lg" style="background: rgba(13, 17, 24, 0.88) !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(0, 229, 255, 0.35); box-shadow: 0 16px 45px rgba(0,0,0,0.8);">
           
           <div class="text-center mb-4">
             <a href="<?= BASE_URL ?>index.php" class="d-inline-block mb-3">

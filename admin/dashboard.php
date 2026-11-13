@@ -32,6 +32,12 @@ $pending_payments = (int)$db->query("SELECT COUNT(*) FROM payments WHERE status 
 // WhatsApp Pending Notifications
 $pending_wa_count = (int)$db->query("SELECT COUNT(*) FROM bookings WHERE whatsapp_status = 'pending'")->fetchColumn();
 
+// Unread Inquiries from Contact Form
+$unread_inquiries = 0;
+try {
+    $unread_inquiries = (int)$db->query("SELECT COUNT(*) FROM inquiries WHERE status = 'unread'")->fetchColumn();
+} catch (Exception $e) {}
+
 // Today's Revenue (from verified payments or confirmed bookings today)
 $rev_today_stmt = $db->prepare("
     SELECT COALESCE(SUM(b.final_amount), 0) 
@@ -188,6 +194,23 @@ for ($i = 6; $i >= 0; $i--) {
     </div>
     <a href="<?= BASE_URL ?>admin/bookings.php?wa_status=pending" class="btn btn-warning text-dark fw-bold btn-sm px-3 py-2">
       <i class="bi bi-send-fill me-1"></i> Review & WhatsApp Now (<?= $pending_wa_count ?>)
+    </a>
+  </div>
+<?php endif; ?>
+
+<!-- Unread Inquiries Banner -->
+<?php if ($unread_inquiries > 0): ?>
+  <div class="alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-3 p-3 mb-4 shadow-sm" style="background: rgba(230, 57, 70, 0.12); border: 1.5px solid #E63946; color: #fff;">
+    <div>
+      <h5 class="alert-heading fw-bold mb-1 text-danger">
+        <i class="bi bi-chat-left-dots-fill fs-5 me-2"></i><?= $unread_inquiries ?> New Customer Inquiry Message<?= $unread_inquiries > 1 ? 's' : '' ?> Awaiting Response
+      </h5>
+      <span class="small text-light">
+        Visitors submitted questions via the Contact page regarding tournaments, squad LAN, or session bookings.
+      </span>
+    </div>
+    <a href="<?= BASE_URL ?>admin/inquiries.php?status=unread" class="btn btn-danger btn-sm px-3 py-2 fw-bold">
+      <i class="bi bi-reply-fill me-1"></i> Open &amp; Reply to Inquiries (<?= $unread_inquiries ?>)
     </a>
   </div>
 <?php endif; ?>

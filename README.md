@@ -1,134 +1,218 @@
 # IRONCLAD GAMING SANCTUARY
-### Full-Stack Gaming Cafe Booking & Management Platform
+### Full-Stack Gaming Cafe Booking, Management & Customer Loyalty Platform
 
 **Tagline:** *Gaming. Competition. Community.*  
-**Confirmed Location:** Behind Redtape Showroom, Near PSPCL Office, Guru Angad Dev Nagar, Sri Muktsar Sahib, Punjab – 152026.
+**Confirmed Location:** Behind Redtape Showroom, Near PSPCL Office, Guru Angad Dev Nagar, Sri Muktsar Sahib, Punjab – 152026.  
+**Default Local URL:** `http://localhost/GamingCafe/`  
+**Admin Portal:** `http://localhost/GamingCafe/admin/login.php`  
+**Release Version:** `v2.2.0 (November 2026)`
 
 ---
 
 ## 1. Project Overview
 
-**IRONCLAD GAMING SANCTUARY** is a complete, production-oriented, dynamic full-stack web application designed for a real gaming cafe in Sri Muktsar Sahib, Punjab. 
+**IRONCLAD GAMING SANCTUARY** is a production-ready, dynamic full-stack web application designed for esports gaming cafes and lounges. 
 
-The platform delivers an immersive dark esports arena aesthetic with tasteful **RGB ambient lighting** while providing a rock-solid, server-validated booking engine and an owner-controlled administrative suite.
+The platform delivers an immersive dark esports arena aesthetic with **RGB ambient glow**, high-visibility atmospheric cafe and GTA 6 backgrounds, dynamic scroll-driven visual reveals, and a server-validated booking engine. It provides a complete customer self-service suite, an owner/admin command center with 1-click WhatsApp festival/offer broadcasting, lead capturing, and multi-user role-based security.
 
 ---
 
 ## 2. Tech Stack & Architecture
 
-- **Backend:** PHP 8.2+ (OOP & Procedural helpers, PDO with Prepared Statements)
-- **Database:** MySQL / MariaDB (`ironclad_gaming` normalized database schema)
-- **Frontend:** HTML5, CSS3, JavaScript (Vanilla ES6+), Bootstrap 5.3, Bootstrap Icons
-- **Typography:** *Rajdhani*, *Segoe UI*, Modern Sans-Serif
-- **Server:** Apache 2.4 (XAMPP Local Deployment & Shared Hosting Ready)
+- **Backend:** Native PHP 8.2+ (OOP & procedural helper architecture, PDO with prepared statements, native session management)
+- **Database:** MariaDB 10.4+ / MySQL 8.0+ (`ironclad_gaming` normalized schema with foreign key constraints and transactional integrity)
+- **Frontend:** HTML5, CSS3 with modern CSS custom properties, Bootstrap 5.3.3, Bootstrap Icons 1.11.3, Google Fonts (*Rajdhani* for futuristic headings & *Segoe UI* for crisp legibility)
+- **Visual Engine:** Dynamic scroll-driven progressive background reveals, frosted glassmorphism (`backdrop-filter: blur(14px)`), desktop parallax (`background-attachment: fixed`), and cache-busted styling
+- **Client-Side Libraries:**
+  - `html2pdf.js` v0.10.1 (rasterized vector A4 single-page passes)
+  - `Chart.js` (dynamic esports revenue and station utilization analytics)
+  - Vanilla ES6+ JavaScript (zero jQuery dependency for fast, lightweight performance)
+- **Server:** Apache 2.4 (XAMPP local environment & shared hosting ready)
 
 ---
 
-## 3. Confirmed Business Identity & Asset Integration
+## 3. Core Modules & Key Features
 
-- **Actual Business Logo:** Uses the authentic 3D embossed metallic crest with horned warrior helm and ember sparks (`images/ironclad_logo.jpeg`).
-- **Brand Palette:**
-  - Primary Background: `#090B10`
-  - Secondary Background: `#151922`
-  - Elevated Cards: `#1B2230`
-  - Accent Gold: `#D6A84B`
-  - Electric Red: `#E63946`
-  - RGB Ambient Accents: `#00E5FF` (Cyan), `#B026FF` (Purple), `#39FF88` (Green)
-  - Main Text: `#F5F7FA`, Muted: `#A7AFBD`
-- **Accessibility:** Fully supports `prefers-reduced-motion` to tone down keyframe glows on request.
+### 3.1. Customer Account & Authentication Suite
+- **Player Sign-In (`login.php`):** Dual-mode identifier login supporting either customer mobile number or email address, password verification, persistent remember-me tokens, and automatic redirection to previous actions.
+- **Player Registration (`register.php`):** Instant gamer registration capturing full name, verified 10-digit mobile number, email, and secure hashed password (`password_hash` with BCRYPT).
+- **Gamer Dashboard (`my-account.php`):** Real-time customer hub showing verified gamer badge, active station reservations, historical gameplay logs, total hours played, total amount spent, profile details update, and password changes.
+- **Navigation Dropdown:** Compact, high-density navbar featuring the gamer's profile badge, quick link to Book Station, Active Passes, and Sign Out.
+
+### 3.2. Admin Customer Hub & WhatsApp Broadcast System
+- **Customer CRM (`admin/customers.php`):** Centralized directory of all customer mobile numbers, emails, booking totals, and lifetime spend.
+- **Festival & Promo WhatsApp Broadcaster:** Allows the cafe owner to dispatch pre-typed festival greetings (Diwali, New Year, Eid, Christmas), weekend tournament invitations, or custom promotional messages to any or all customers with 1-click WhatsApp integration.
+- **Search & Filtering:** Real-time search across customer names, phone numbers, and email addresses with CSV export capability.
+
+### 3.3. Contact & Inquiry Lead Generation System
+- **Public Contact Form (`contact.php`):** Clean, validated inquiry submission capturing customer name, contact info, subject, and message.
+- **Automatic Lead Capture:** Submissions automatically check the customer registry; new inquiries are immediately registered as customer leads.
+- **Admin Inquiries Inbox (`admin/inquiries.php`):** Inbox for the arena manager with unread badge counters, status updates (New, Replied, Closed), internal notes, and 1-click WhatsApp reply with pre-filled acknowledgment.
+
+### 3.4. Role-Based Admin & Account Recovery Architecture
+- **Multi-User Role Permissions (RBAC):**
+  - **Super Admin (Owner):** Full control over users, settings, financial reports, station management, and booking cancellations.
+  - **Staff (Receptionist):** Daily operational access to check in players, verify payments, and manage reservations, with restrictions preventing modification of owner credentials.
+  - **Developer Account:** Documented, authorized technical support account for system maintenance.
+- **Account Recovery:** Multi-layered security preventing staff from locking out the owner, email-based password recovery, and documented hosting/database restoration procedures.
+
+### 3.5. Atmospheric Cyber & Gaming Cafe Visual Engine
+- **Immersive Background Art:** Integrates authentic gaming cafe interior photography (`images/cafe_bg.jpeg`) and vibrant GTA 6 cyberpunk artwork (`images/gta6_bg.jpeg`).
+- **Dynamic Scroll Visibility Enhancer:** Real-time scroll listener in `assets/js/main.js` using `requestAnimationFrame` that dynamically lightens the overlay as players scroll down, revealing rich gaming visuals.
+- **High-Contrast Glassmorphism:** Frosted glass cards (`background: rgba(13, 17, 24, 0.82-0.88)` with `backdrop-filter: blur(14px)`), dual-layer text shadows (`text-shadow: 0 2px 16px rgba(0, 0, 0, 0.98)`), and championship gold/cyan glowing borders.
+- **Global Page Consistency:** Background visuals deployed across all frontend pages (`about.php`, `experiences.php`, `pricing.php`, `offers.php`, `gallery.php`, `book.php`, `check-booking.php`, `contact.php`, `reviews.php`, `my-account.php`, `login.php`, `register.php`), while keeping the Hero section and "Visual Experience Battle Arena & Video Reels" clean and exempt.
+
+### 3.6. Atomic Collision-Free Booking Engine (`book.php`)
+- **Race Condition Prevention:** Database transaction with `SELECT ... FOR UPDATE` row-level locking to eliminate double bookings.
+- **Midnight-Crossing Support:** Fully supports overnight sessions crossing 00:00 midnight without time calculation errors.
+- **Real-Time Slot Verification (`api/availability.php`):** Live AJAX slot radar checking operating hours (10:00 AM – 11:00 PM) and existing bookings.
+
+### 3.7. UPI QR Payment Verification & Razorpay Gateway
+- **Dynamic UPI QR (`admin/upi-qr.php`):** Generates real-time NPCI-compliant UPI QR codes for GPay, PhonePe, Paytm, and BHIM.
+- **Transaction Reference Matching:** Customers submit their 12-digit UTR number; staff verifies payments with a single click in the admin terminal.
+- **Razorpay Integration:** Full Razorpay Checkout support with webhook and callback validation configurable via `.env` and `admin/settings.php`.
+
+### 3.8. 1-Page Print-Ready Digital Receipt & Vector A4 PDF Pass
+- **Receipt Portal (`receipt.php`):** Clean, single-page print layout formatted for standard A4 and thermal receipt printers with zero page spillover.
+- **Downloadable PDF:** One-click client-side vector PDF generation powered by `html2pdf.js`.
+
+### 3.9. 100% Dynamic White-Label Rebranding Engine
+- **Admin Settings (`admin/settings.php`):** Modify Cafe Name, Short Brand, Tagline, Address, Phone, Email, Logo Crest, Video Tour, and Razorpay credentials without touching any PHP code.
+
+### 3.10. Gamer Comfort & Hospitality Policies
+- **4K + QLED Screens:** High-refresh displays across PC battle rigs and console lounges.
+- **Cozy & Aesthetic RGB Ambience:** Climate-controlled space with customizable RGB lighting.
+- **In-House Refreshments:** Chilled energy drinks (Red Bull, Monster), sodas, and packaged snacks.
+- **100% Outside Food Allowed:** Squads can bring their own outside food, takeout, or pizza.
 
 ---
 
-## 4. Public Pages
+## 4. Directory & File Structure
 
-1. **Home (`index.php`)**: Full-screen esports hero featuring the real business logo, gaming experiences overview, station live status, transparent pricing passes, limited-time promo banners, booking CTA, gallery showcase, approved reviews, and Google Maps location guide.
-2. **About Us (`about.php`)**: The Ironclad story, philosophy (*Gaming. Competition. Community.*), hardware standards, and sanctuary code of honor.
-3. **Gaming Experiences (`experiences.php`)**: Deep dive into PC Battle Stations (high-refresh FPS setups), 4K Console Lounges, and 5v5 Squad LAN Bays.
-4. **Pricing (`pricing.php`)**: Hourly station rates, multi-hour passes (Quick Battle, Arena Pass, Champion Pass, Night Owl Pass), and pricing FAQs.
-5. **Book Your Session (`book.php`)**: Interactive real-time booking engine with live station availability lookup, duration selection, instant promo code discount application, atomic collision prevention, and customer registration.
-6. **Check Booking Status & UPI Payment (`check-booking.php`)**: Lookup reservation via reference code + phone number. Displays official UPI QR scanner, accepts 12-digit UTR submission and screenshot proof upload, and displays real-time verification status.
-7. **Special Offers (`offers.php`)**: Active discount codes with one-click copy buttons and validity terms.
-8. **Arena Gallery (`gallery.php`)**: Categorized photography of PC arena, console lounges, tournaments, and RGB ambience.
-9. **Player Reviews (`reviews.php`)**: Verified customer ratings and honest review submission form with anti-spam admin moderation.
-10. **Contact & Location (`contact.php`)**: Full address, landmark guidance, Google Maps navigation, direct directions link, and customer inquiry form.
+```
+GamingCafe/
+├── .env                          # Environment variables & API keys
+├── .gitignore                    # Git exclusions
+├── about.php                     # About the Sanctuary & Three Pillars
+├── book.php                      # Interactive atomic booking engine
+├── check-booking.php             # Self-service booking status & payment lookup
+├── contact.php                   # Contact page with lead generation form
+├── experiences.php               # Gaming rigs & console categories
+├── gallery.php                   # Visual gallery & video reels
+├── index.php                     # Homepage with atmospheric background engine
+├── login.php                     # Player account sign-in
+├── logout.php                    # Player session termination
+├── my-account.php                # Gamer dashboard & booking history
+├── offers.php                    # Promotional offers & battle pass discounts
+├── pricing.php                   # Transparent pricing & hourly rates
+├── receipt.php                   # 1-page printable digital receipt & PDF pass
+├── register.php                  # New player profile registration
+├── reviews.php                   # Customer reviews & player rating submission
+├── robots.txt                    # Search engine crawler instructions
+├── sitemap.xml                   # XML sitemap for SEO indexing
+├── admin/                        # Owner / Administrator Control Center
+│   ├── index.php                 # Admin entry router
+│   ├── login.php                 # Administrative authentication
+│   ├── logout.php                # Admin session logout
+│   ├── dashboard.php             # Analytics, quick actions & metrics
+│   ├── bookings.php              # Comprehensive reservation manager
+│   ├── customers.php             # Customer CRM & WhatsApp broadcaster
+│   ├── inquiries.php             # Contact inquiries & lead management
+│   ├── stations.php              # Station & hardware inventory
+│   ├── pricing.php               # Pass & pricing tier configuration
+│   ├── offers.php                # Promo codes & discount campaigns
+│   ├── reviews.php               # Review moderation & approval
+│   ├── gallery.php               # Visual media & video upload manager
+│   ├── settings.php              # White-label rebranding & payment settings
+│   ├── timetable.php             # Real-time hourly slot timetable
+│   ├── upi-qr.php                # Dynamic UPI QR generator
+│   └── includes/
+│       ├── admin-header.php      # Admin navigation & sidebar
+│       └── admin-footer.php      # Admin scripts & footer
+├── api/                          # Asynchronous JSON Endpoints
+│   ├── availability.php          # Slot availability & clash detection
+│   └── verify-payment.php        # Real-time payment verification
+├── assets/
+│   ├── css/
+│   │   └── style.css             # Unified Ironclad theme CSS
+│   └── js/
+│       ├── main.js               # Client-side validation & scroll visual engine
+│       └── booking.js            # Booking calculator & availability AJAX
+├── config/
+│   ├── config.php                # Application constants & configuration
+│   ├── database.php              # PDO database connection provider
+│   └── functions.php             # Core utility helpers & business logic
+├── database/
+│   ├── schema.sql                # Complete database structure
+│   ├── migrate_customers.php     # Customer account migration
+│   └── migrate_inquiries.php     # Inquiries table migration
+├── images/
+│   ├── cafe_bg.jpeg              # Authentic gaming cafe interior background
+│   ├── gta6_bg.jpeg              # GTA 6 cyberpunk neon background
+│   ├── ironclad_logo.jpeg        # 3D embossed metallic brand crest
+│   ├── NOBG_IRONCLADLOGO.png     # Transparent brand logo
+│   ├── intro_clad.mp4            # Arena tour video reel
+│   └── ironclad_boss.mp4         # Arena gameplay reel
+└── uploads/                      # Dynamic administrator media uploads
+    ├── branding/                 # Custom logo & video uploads
+    ├── gallery/                  # Uploaded photo & video files
+    └── qr/                       # Custom UPI QR codes
+```
 
 ---
 
-## 5. Booking & Payment Engine
+## 5. Installation & Setup Guide
 
-- **Server-Side Slot Validation:** Verifies station status, checks business operating hours (10:00 AM – 11:00 PM), checks blocked holiday dates, and prevents overlapping active reservations using MySQL row transactions.
-- **Unique Reference Format:** Generates non-guessable, human-friendly references (e.g. `IC-2026-X8K9M`).
-- **Manual UPI Workflow:**
-  - Owner uploads authentic business UPI QR scanner from admin panel.
-  - Customer views payable amount and scans QR using GPay, PhonePe, Paytm, or BHIM.
-  - Customer submits 12-digit UPI Transaction ID (UTR) + optional screenshot.
-  - Payment status remains strictly **Pending Verification** until owner manually verifies it.
-  - Owner approves payment in one click, transitioning booking to **Confirmed**.
+### Local Deployment (XAMPP):
+1. Start **Apache** and **MySQL** in the XAMPP Control Panel.
+2. Clone or copy the project into your web root:
+   ```
+   C:\xampp\htdocs\GamingCafe\
+   ```
+3. Open **phpMyAdmin** (`http://localhost/phpmyadmin/`) and create a database named:
+   ```sql
+   CREATE DATABASE ironclad_gaming CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+4. Import `database/schema.sql`.
+5. Run migrations if needed:
+   - `http://localhost/GamingCafe/database/migrate_customers.php`
+   - `http://localhost/GamingCafe/database/migrate_inquiries.php`
+6. Verify database credentials in `config/database.php` or `.env`:
+   ```
+   DB_HOST=127.0.0.1
+   DB_NAME=ironclad_gaming
+   DB_USER=root
+   DB_PASS=
+   ```
+7. Open in your browser:
+   - **Frontend:** `http://localhost/GamingCafe/`
+   - **Player Login:** `http://localhost/GamingCafe/login.php`
+   - **Admin Control Center:** `http://localhost/GamingCafe/admin/login.php`
 
 ---
 
-## 6. Admin Control Center (`/admin`)
+## 6. Default Administrative Credentials
 
-**Access URL:** `http://localhost/GamingCafe/admin/login.php`  
-**Default Superadmin Credentials:**
 - **Username:** `admin`
 - **Password:** `IroncladAdmin2026!`
+- **Access Level:** Super Admin (Owner)
 
-### Modules & Capabilities:
-1. **Dashboard (`dashboard.php`)**: Real-time KPIs (Total Bookings, Today's Bookings, Pending Verification, Confirmed Slots, Today's Verified Revenue, Monthly Revenue, Station Utilization Radar, and Recent Reservations).
-2. **Bookings Management (`bookings.php`)**: Search, filter by date, station, and status.
-3. **Walk-In Booking Creator (`booking-create.php`)**: Register walk-in players directly at the counter.
-4. **Booking Detail & Action Panel (`booking-detail.php`)**: Status updater, internal counter notes, customer history, and UTR lookup.
-5. **Gaming Stations CRUD (`stations.php`)**: Add, edit, activate/deactivate stations, set category, hourly rates, and hardware specs.
-6. **Availability & Hours (`availability.php`)**: Configure weekly business hours (Monday–Sunday) and add scheduled closure/holiday dates.
-7. **Pricing & Battle Passes (`pricing.php`)**: CRUD for multi-hour passes, feature bullets, popular badge toggle.
-8. **Payment Verification Queue (`payments.php`)**: View submitted UTRs, inspect payment screenshots, approve or reject payments with customer-facing reason.
-9. **UPI QR Management (`upi-qr.php`)**: Upload or replace authentic UPI QR code image, update UPI VPA ID, merchant name, and customer instructions.
-10. **Customers CRM (`customers.php`)**: Customer directory with lifetime spend, visit count, and direct link to their booking logs.
-11. **Offers & Promos (`offers.php`)**: Create coupon codes with percentage or fixed discounts, minimum booking hours, and expiry dates.
-12. **Gallery Management (`gallery.php`)**: Upload arena photography with category tags and homepage feature toggles.
-13. **Reviews Moderation (`reviews.php`)**: Approve, feature, or delete customer-submitted reviews.
-14. **Reports & Analytics (`reports.php`)**: Revenue by category, peak traffic hours, payment channel breakdown.
-15. **Website Settings (`settings.php`)**: Edit business name, address, contact phone, email, WhatsApp, hero copy, social handles, and Google Maps iframe without touching code.
-16. **Admin Profile (`profile.php`)**: Secure password change and email update.
-17. **Activity Logs (`logs.php`)**: Full administrative audit trail with timestamps and IP addresses.
+*(Note: Change credentials immediately in production via `admin/settings.php`.)*
 
 ---
 
-## 7. Security Hardening
+## 7. Security Implementation
 
-- **Prepared Statements:** 100% of SQL queries containing input use PDO prepared statements.
-- **Output Escaping:** Strict UTF-8 escaping via `htmlspecialchars()` protects against Cross-Site Scripting (XSS).
-- **CSRF Tokens:** All state-changing POST forms and sensitive GET actions are protected by cryptographic CSRF tokens.
-- **Password Hashing:** Passwords hashed with `PASSWORD_BCRYPT`.
-- **Brute Force Lockout:** 5 consecutive failed login attempts trigger an automated 15-minute account lockout.
-- **Session Security:** `session_regenerate_id(true)` prevents session fixation; session cookies configured with `HttpOnly`, `SameSite=Lax`, and `Secure` (when on HTTPS).
-- **File Upload Protection:** Uploads strictly verified by MIME type, file extension whitelist (`jpg`, `jpeg`, `png`, `webp`, `svg`), and randomized filenames. Script execution is completely disabled inside `uploads/` via `.htaccess`.
-
----
-
-## 8. Local SEO Optimization (Sri Muktsar Sahib)
-
-- **Targeted Keywords:** *Gaming Cafe in Sri Muktsar Sahib*, *Gaming Zone in Muktsar*, *Gaming Lounge in Sri Muktsar Sahib*, *PC Gaming in Muktsar*, *Multiplayer Gaming in Muktsar*.
-- **LocalBusiness Structured Data:** JSON-LD schema with address in Guru Angad Dev Nagar, Sri Muktsar Sahib, Punjab, PIN 152026.
-- **Social Metadata:** Complete Open Graph (`og:*`) and Twitter Card (`twitter:*`) tags referencing the real business logo.
-- **Crawler Files:** `robots.txt` and `sitemap.xml` included and configured.
+- **CSRF Defense:** Cryptographic tokens generated per session and validated on every `POST` request.
+- **SQL Injection Prevention:** 100% parameter binding through PDO prepared statements across all queries.
+- **XSS Mitigation:** Strict HTML character escaping via `e()` helper applied to all user-facing output.
+- **Password Security:** Hashed using `password_hash()` with BCRYPT and secure cost factor.
+- **Audit Trail:** Sensitive administrative events recorded in `activity_logs` with admin ID, timestamp, and IP address.
+- **Brute-Force Protection:** Rate-limiting safeguards on login attempts.
 
 ---
 
-## 9. Local Installation & Setup (XAMPP)
+## 8. License & Ownership
 
-1. **Place Project in XAMPP:**
-   Ensure the project folder is at `C:\xampp\htdocs\GamingCafe`.
-2. **Start Services in XAMPP Control Panel:**
-   Start **Apache** and **MySQL**.
-3. **Database Setup:**
-   - Open phpMyAdmin at `http://localhost/phpmyadmin/`
-   - Create database `ironclad_gaming` (utf8mb4_unicode_ci)
-   - Import `database/schema.sql`
-4. **Open Application in Browser:**
-   - **Public Sanctuary:** `http://localhost/GamingCafe/`
-   - **Owner Command Center:** `http://localhost/GamingCafe/admin/login.php`
-
-#   G a m i n g C a f e  
- 
+Developed by **shubhdeep689** for **IRONCLAD GAMING SANCTUARY**, Sri Muktsar Sahib, Punjab.  
+All rights reserved. Fully white-labeled for global commercial gaming lounge operations.

@@ -383,5 +383,49 @@ document.addEventListener('DOMContentLoaded', function () {
       } catch (e) {}
     }
   }
+
+  // Dynamic Background Visibility Enhancer on Scroll (Reveals more background as user scrolls down)
+  const atmosphericSections = document.querySelectorAll('.section-cafe-bg, .section-gta6-bg');
+  if (atmosphericSections.length > 0) {
+    let scrollBgTicking = false;
+
+    function adjustAtmosphericBackgrounds() {
+      const windowH = window.innerHeight;
+      atmosphericSections.forEach(function (sec) {
+        const rect = sec.getBoundingClientRect();
+        // Check if section is visible in viewport
+        if (rect.top < windowH && rect.bottom > 0) {
+          // Progress of section across viewport: 0 (entering from bottom) to 1 (leaving from top)
+          const progress = Math.min(Math.max((windowH - rect.top) / (windowH + rect.height), 0), 1);
+          // Center factor: 0 at top/bottom edges of view, 1 when section is centered
+          const centerFocus = 1 - Math.abs(progress - 0.5) * 2;
+
+          const isGta = sec.classList.contains('section-gta6-bg');
+          // Base opacity when scrolling: Cafe goes down to ~0.18, GTA6 goes down to ~0.10 for maximum visibility
+          const baseCenterOp = isGta ? 0.16 : 0.25;
+          const currentCenterOp = Math.max(isGta ? 0.08 : 0.15, baseCenterOp - (centerFocus * 0.12));
+          const currentEdgeOp = Math.min(0.55, currentCenterOp + 0.25);
+          const currentBottomOp = Math.min(0.60, currentCenterOp + 0.30);
+
+          const baseUrl = (typeof window.BASE_URL !== 'undefined') ? window.BASE_URL : './';
+          const bgImg = sec.dataset.bgUrl || (isGta ? `${baseUrl}images/gta6_bg.jpeg` : `${baseUrl}images/cafe_bg.jpeg`);
+          if (bgImg) {
+            sec.style.backgroundImage = `linear-gradient(180deg, rgba(9, 11, 16, ${currentEdgeOp.toFixed(2)}) 0%, rgba(9, 11, 16, ${currentCenterOp.toFixed(2)}) 50%, rgba(9, 11, 16, ${currentBottomOp.toFixed(2)}) 100%), url('${bgImg}')`;
+          }
+        }
+      });
+      scrollBgTicking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!scrollBgTicking) {
+        window.requestAnimationFrame(adjustAtmosphericBackgrounds);
+        scrollBgTicking = true;
+      }
+    }, { passive: true });
+
+    // Initial check on load
+    adjustAtmosphericBackgrounds();
+  }
 });
 
