@@ -904,6 +904,14 @@ document.addEventListener('DOMContentLoaded', function() {
       vid.className = 'w-100 h-100';
       if (poster) vid.poster = poster;
       mediaArea.appendChild(vid);
+
+      const playPromise = vid.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function() {
+          vid.muted = true;
+          vid.play().catch(function() {});
+        });
+      }
     } else {
       const img = document.createElement('img');
       img.src = url;
@@ -931,6 +939,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   items.forEach((item, idx) => {
     item.addEventListener('click', () => openLightbox(idx));
+
+    // Live video thumbnail hover preview
+    const cardVid = item.querySelector('video');
+    if (cardVid) {
+      item.addEventListener('mouseenter', () => { cardVid.play().catch(() => {}); });
+      item.addEventListener('mouseleave', () => { cardVid.pause(); cardVid.currentTime = 0; });
+    }
   });
 
   closeBtn.addEventListener('click', closeLightbox);

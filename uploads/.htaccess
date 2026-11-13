@@ -1,9 +1,17 @@
-# Prevent script execution in upload directory
-<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|cgi|sh|bash|exe)$">
-    Order Deny,Allow
-    Deny from all
-</FilesMatch>
+# IRONCLAD GAMING SANCTUARY
+# Prevent PHP and script execution in uploads
 
-Options -Indexes -ExecCGI
-RemoveHandler .php .phtml .php3 .php4 .php5
+Options -Indexes
 
+<IfModule mod_authz_core.c>
+    <FilesMatch "\.(php[0-9]?|phtml|phar|pl|py|cgi|sh|bash|exe)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    <FilesMatch "\.(php[0-9]?|phtml|phar|pl|py|cgi|sh|bash|exe)$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+</IfModule>

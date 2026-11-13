@@ -19,23 +19,21 @@ require_once __DIR__ . '/includes/header.php';
 
 $db = get_db();
 
+// Fetch all gallery items once for instantaneous client-side filtering + badge counts
+$all_media = $db->query("SELECT * FROM gallery_images ORDER BY is_featured DESC, display_order ASC, id DESC")->fetchAll();
+
+$count_all = count($all_media);
+$count_videos = count(array_filter($all_media, fn($x) => ($x['media_type'] ?? '') === 'video'));
+$count_photos = count(array_filter($all_media, fn($x) => ($x['media_type'] ?? '') === 'image'));
+$count_pc = count(array_filter($all_media, fn($x) => ($x['category'] ?? '') === 'pc_arena'));
+$count_console = count(array_filter($all_media, fn($x) => ($x['category'] ?? '') === 'console_lounge'));
+$count_tournaments = count(array_filter($all_media, fn($x) => ($x['category'] ?? '') === 'tournaments'));
+$count_rgb = count(array_filter($all_media, fn($x) => ($x['category'] ?? '') === 'rgb_vibes'));
+
 $filter = trim($_GET['category'] ?? 'all');
-$sql = "SELECT * FROM gallery_images WHERE 1=1";
-$params = [];
-
-if ($filter === 'videos') {
-    $sql .= " AND media_type = 'video'";
-} elseif ($filter === 'photos') {
-    $sql .= " AND media_type = 'image'";
-} elseif ($filter !== 'all' && in_array($filter, ['pc_arena', 'console_lounge', 'tournaments', 'rgb_vibes'])) {
-    $sql .= " AND category = :cat";
-    $params[':cat'] = $filter;
+if (!in_array($filter, ['all', 'videos', 'photos', 'pc_arena', 'console_lounge', 'tournaments', 'rgb_vibes'])) {
+    $filter = 'all';
 }
-$sql .= " ORDER BY is_featured DESC, display_order ASC, id DESC";
-
-$stmt = $db->prepare($sql);
-$stmt->execute($params);
-$gallery_items = $stmt->fetchAll();
 ?>
 
 <!-- Page Banner -->
@@ -46,9 +44,16 @@ $gallery_items = $stmt->fetchAll();
       <span class="small text-gold text-uppercase fw-bold" style="letter-spacing: 0.1em;">Authentic Sanctuary Media</span>
     </div>
     <h1 class="display-5 fw-bold mt-1 text-light brand-font">Arena Visual Gallery & Reels</h1>
-    <p class="text-muted-iron mx-auto mb-0" style="max-width: 680px;">
+    <p class="text-muted-iron mx-auto mb-3" style="max-width: 680px;">
       Explore real photography and live video clips of our 240Hz PC battle rigs, PS5 console lounge, tournament setup, and ambient RGB atmosphere in <?= e($brand_city) ?>.
     </p>
+
+    <!-- Quick Stat Badges Strip -->
+    <div class="d-inline-flex flex-wrap justify-content-center gap-2 text-muted-iron small">
+      <span class="badge bg-black bg-opacity-60 border border-secondary border-opacity-25 px-2 py-1"><i class="bi bi-cpu text-gold me-1"></i> 240Hz Esports Rigs</span>
+      <span class="badge bg-black bg-opacity-60 border border-secondary border-opacity-25 px-2 py-1"><i class="bi bi-controller text-cyan me-1"></i> PS5 4K Lounges</span>
+      <span class="badge bg-black bg-opacity-60 border border-secondary border-opacity-25 px-2 py-1"><i class="bi bi-camera-reels text-danger me-1"></i> Live Action Reels</span>
+    </div>
   </div>
 </section>
 
@@ -56,38 +61,85 @@ $gallery_items = $stmt->fetchAll();
 <section class="py-5">
   <div class="container py-2">
     
-    <!-- Filter Tabs (GUI styled) -->
-    <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
-      <a href="<?= BASE_URL ?>gallery.php?category=all" class="btn btn-iron btn-iron-sm <?= $filter === 'all' ? 'btn-iron-primary' : 'btn-iron-outline' ?>">
-        <i class="bi bi-grid-fill me-1"></i> All Media
-      </a>
-      <a href="<?= BASE_URL ?>gallery.php?category=videos" class="btn btn-iron btn-iron-sm <?= $filter === 'videos' ? 'btn-iron-cyan' : 'btn-iron-outline' ?>">
-        <i class="bi bi-play-circle-fill me-1 text-danger"></i> Video Reels
-      </a>
-      <a href="<?= BASE_URL ?>gallery.php?category=pc_arena" class="btn btn-iron btn-iron-sm <?= $filter === 'pc_arena' ? 'btn-iron-primary' : 'btn-iron-outline' ?>">
-        <i class="bi bi-display me-1"></i> PC Arena
-      </a>
-      <a href="<?= BASE_URL ?>gallery.php?category=console_lounge" class="btn btn-iron btn-iron-sm <?= $filter === 'console_lounge' ? 'btn-iron-primary' : 'btn-iron-outline' ?>">
-        <i class="bi bi-controller me-1"></i> Console Lounge
-      </a>
-      <a href="<?= BASE_URL ?>gallery.php?category=tournaments" class="btn btn-iron btn-iron-sm <?= $filter === 'tournaments' ? 'btn-iron-primary' : 'btn-iron-outline' ?>">
-        <i class="bi bi-trophy-fill me-1"></i> Tournaments
-      </a>
-      <a href="<?= BASE_URL ?>gallery.php?category=rgb_vibes" class="btn btn-iron btn-iron-sm <?= $filter === 'rgb_vibes' ? 'btn-iron-primary' : 'btn-iron-outline' ?>">
-        <i class="bi bi-lightning-charge-fill me-1"></i> RGB Vibes
-      </a>
+    <!-- Compact & Beautiful Cybernetic Filter Dock -->
+    <div class="gallery-filter-wrapper text-center">
+      <div class="gallery-filter-dock">
+        <a href="<?= BASE_URL ?>gallery.php?category=all" class="gallery-filter-btn <?= $filter === 'all' ? 'active' : '' ?>" data-filter="all">
+          <i class="bi bi-grid-fill"></i>
+          <span>All</span>
+          <span class="filter-count"><?= $count_all ?></span>
+        </a>
+        <a href="<?= BASE_URL ?>gallery.php?category=videos" class="gallery-filter-btn btn-cyan-theme <?= $filter === 'videos' ? 'active' : '' ?>" data-filter="videos">
+          <i class="bi bi-camera-reels-fill text-danger"></i>
+          <span>Reels</span>
+          <span class="filter-count"><?= $count_videos ?></span>
+        </a>
+        <a href="<?= BASE_URL ?>gallery.php?category=photos" class="gallery-filter-btn <?= $filter === 'photos' ? 'active' : '' ?>" data-filter="photos">
+          <i class="bi bi-camera-fill text-gold"></i>
+          <span>Photos</span>
+          <span class="filter-count"><?= $count_photos ?></span>
+        </a>
+        <a href="<?= BASE_URL ?>gallery.php?category=pc_arena" class="gallery-filter-btn <?= $filter === 'pc_arena' ? 'active' : '' ?>" data-filter="pc_arena">
+          <i class="bi bi-display"></i>
+          <span>PC Arena</span>
+          <span class="filter-count"><?= $count_pc ?></span>
+        </a>
+        <a href="<?= BASE_URL ?>gallery.php?category=console_lounge" class="gallery-filter-btn <?= $filter === 'console_lounge' ? 'active' : '' ?>" data-filter="console_lounge">
+          <i class="bi bi-controller"></i>
+          <span>Console</span>
+          <span class="filter-count"><?= $count_console ?></span>
+        </a>
+        <a href="<?= BASE_URL ?>gallery.php?category=tournaments" class="gallery-filter-btn <?= $filter === 'tournaments' ? 'active' : '' ?>" data-filter="tournaments">
+          <i class="bi bi-trophy-fill"></i>
+          <span>Tournaments</span>
+          <span class="filter-count"><?= $count_tournaments ?></span>
+        </a>
+        <a href="<?= BASE_URL ?>gallery.php?category=rgb_vibes" class="gallery-filter-btn <?= $filter === 'rgb_vibes' ? 'active' : '' ?>" data-filter="rgb_vibes">
+          <i class="bi bi-lightning-charge-fill"></i>
+          <span>RGB Vibes</span>
+          <span class="filter-count"><?= $count_rgb ?></span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Centered Sleek Status Pill -->
+    <div class="gallery-status-bar">
+      <div class="d-flex align-items-center gap-2">
+        <span class="status-indicator"></span>
+        <span class="text-light fw-bold" id="activeCategoryLabel"><?= e(ucfirst(str_replace('_', ' ', $filter === 'all' ? 'All Media' : $filter))) ?></span>
+        <span class="text-secondary">&bull;</span>
+        <span><span class="text-gold fw-bold" id="activeCountDisplay"><?= count(array_filter($all_media, function($x) use ($filter) {
+          if ($filter === 'all') return true;
+          if ($filter === 'videos') return ($x['media_type'] ?? '') === 'video';
+          if ($filter === 'photos') return ($x['media_type'] ?? '') === 'image';
+          return ($x['category'] ?? '') === $filter;
+        })) ?></span> items</span>
+      </div>
+      <span class="text-secondary d-none d-sm-inline">&bull;</span>
+      <div class="d-none d-sm-flex align-items-center text-muted-iron">
+        <span><i class="bi bi-cursor-fill text-cyan me-1"></i> Click card to expand or play</span>
+      </div>
     </div>
 
     <!-- Gallery Grid with Clickable Expanded View -->
     <div class="row g-4" id="ironcladGalleryGrid">
-      <?php if (!empty($gallery_items)): ?>
-        <?php foreach ($gallery_items as $index => $item): ?>
+      <?php if (!empty($all_media)): ?>
+        <?php foreach ($all_media as $index => $item): ?>
           <?php 
             $is_video = (($item['media_type'] ?? 'image') === 'video'); 
-            $media_src = $is_video ? BASE_URL . $item['video_url'] : BASE_URL . $item['image_url'];
-            $poster_src = BASE_URL . $item['image_url'];
+            $media_src = $is_video ? BASE_URL . ltrim($item['video_url'], '/') : BASE_URL . ltrim($item['image_url'], '/');
+            $poster_src = BASE_URL . ltrim($item['image_url'], '/');
+            
+            // Server-side initial visibility matching
+            $matches_initial = true;
+            if ($filter === 'videos' && !$is_video) $matches_initial = false;
+            elseif ($filter === 'photos' && $is_video) $matches_initial = false;
+            elseif ($filter !== 'all' && !in_array($filter, ['videos', 'photos']) && ($item['category'] ?? '') !== $filter) $matches_initial = false;
           ?>
-          <div class="col-lg-4 col-md-6">
+          <div class="col-lg-4 col-md-6 gallery-item-col <?= !$matches_initial ? 'filter-hidden' : '' ?>"
+               data-item-col
+               data-col-cat="<?= e($item['category']) ?>"
+               data-col-type="<?= $is_video ? 'videos' : 'photos' ?>">
             <div class="gallery-interactive-card h-100 d-flex flex-column"
                  data-gallery-item
                  data-index="<?= $index ?>"
@@ -98,24 +150,24 @@ $gallery_items = $stmt->fetchAll();
                  data-caption="<?= e($item['caption'] ?? '') ?>"
                  data-category="<?= e(str_replace('_', ' ', $item['category'])) ?>">
               
-              <!-- Thumbnail / Poster -->
+              <!-- Thumbnail / Poster Container -->
               <div class="position-relative overflow-hidden" style="height: 250px; background: #000;">
                 <?php if ($is_video): ?>
-                  <video src="<?= e($media_src) ?>" class="w-100 h-100 object-fit-cover" muted preload="metadata"></video>
+                  <video src="<?= e($media_src) ?>" class="w-100 h-100 object-fit-cover" muted loop playsinline preload="metadata"></video>
                   
-                  <!-- Center Play Trigger -->
+                  <!-- Center Pulsing Play Trigger -->
                   <div class="position-absolute top-50 start-50 translate-middle">
                     <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; background: rgba(9,11,16,0.85); border: 2px solid var(--rgb-cyan); color: #00E5FF; box-shadow: 0 0 20px rgba(0,229,255,0.6);">
                       <i class="bi bi-play-fill fs-2" style="margin-left: 3px;"></i>
                     </div>
                   </div>
 
-                  <span class="position-absolute top-3 start-3 badge bg-danger text-white shadow-sm" style="font-size: 0.7rem; letter-spacing: 0.05em;">
+                  <span class="position-absolute top-3 start-3 badge bg-danger text-white shadow-sm" style="font-size: 0.7rem; letter-spacing: 0.05em; z-index: 3;">
                     <i class="bi bi-camera-reels me-1"></i> VIDEO REEL
                   </span>
                 <?php else: ?>
                   <img src="<?= e($poster_src) ?>" alt="<?= e($item['title']) ?>" class="w-100 h-100 object-fit-cover" loading="lazy">
-                  <span class="position-absolute top-3 start-3 badge bg-dark border border-secondary text-gold shadow-sm" style="font-size: 0.7rem; letter-spacing: 0.05em;">
+                  <span class="position-absolute top-3 start-3 badge bg-dark border border-secondary text-gold shadow-sm" style="font-size: 0.7rem; letter-spacing: 0.05em; z-index: 3;">
                     <i class="bi bi-image me-1"></i> PHOTO
                   </span>
                 <?php endif; ?>
@@ -149,14 +201,33 @@ $gallery_items = $stmt->fetchAll();
                 </div>
 
                 <div class="pt-2 mt-2 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center text-muted-iron" style="font-size: 0.75rem;">
-                  <span><i class="bi bi-geo-alt text-red me-1"></i> <?= e($brand_city) ?> Arena</span>
-                  <span class="text-gold fw-bold"><i class="bi bi-eye me-1"></i> View Fullscreen</span>
+                  <span><i class="bi bi-geo-alt-fill text-danger me-1"></i> <?= e($brand_city) ?> Arena</span>
+                  <span class="text-gold fw-bold"><i class="bi bi-eye me-1"></i> <?= $is_video ? 'Watch Reel' : 'View Fullscreen' ?></span>
                 </div>
               </div>
 
             </div>
           </div>
         <?php endforeach; ?>
+
+        <!-- Empty State (Shown when filter has 0 items) -->
+        <div class="col-12" id="galleryEmptyState" style="display: none;">
+          <div class="iron-card text-center p-5 mx-auto" style="max-width: 650px; background: rgba(17, 21, 30, 0.85); border: 1px solid rgba(214,168,75,0.3); border-radius: 16px;">
+            <div class="mb-3">
+              <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 70px; height: 70px; background: rgba(214,168,75,0.1); border: 2px solid var(--gold); color: var(--gold);">
+                <i class="bi bi-camera-reels fs-2"></i>
+              </div>
+            </div>
+            <h4 class="text-gold brand-font mb-2">No Media in This Category Yet</h4>
+            <p class="text-muted-iron small mb-4">
+              Our team is currently staging fresh footage and photos for this station. Explore all our battle station captures below.
+            </p>
+            <button type="button" class="btn btn-iron btn-iron-primary btn-iron-sm" onclick="applyFilter('all');">
+              <i class="bi bi-grid-fill me-1"></i> View All Media
+            </button>
+          </div>
+        </div>
+
       <?php else: ?>
         <div class="col-12">
           <div class="iron-card text-center p-5 mx-auto" style="max-width: 700px;">
@@ -256,6 +327,14 @@ document.addEventListener('DOMContentLoaded', function() {
       vid.className = 'w-100 h-100';
       if (poster) vid.poster = poster;
       mediaArea.appendChild(vid);
+
+      const playPromise = vid.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function() {
+          vid.muted = true;
+          vid.play().catch(function() {});
+        });
+      }
     } else {
       const img = document.createElement('img');
       img.src = url;
@@ -284,6 +363,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   items.forEach((item, idx) => {
     item.addEventListener('click', () => openLightbox(idx));
+
+    // Live video thumbnail hover preview
+    const cardVid = item.querySelector('video');
+    if (cardVid) {
+      item.addEventListener('mouseenter', () => { cardVid.play().catch(() => {}); });
+      item.addEventListener('mouseleave', () => { cardVid.pause(); cardVid.currentTime = 0; });
+    }
   });
 
   closeBtn.addEventListener('click', closeLightbox);
