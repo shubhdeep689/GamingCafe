@@ -36,13 +36,22 @@ Options -Indexes
 </IfModule>
 
 # Protect sensitive files and directories
-<FilesMatch "^(schema\.sql|\.env|\.git|composer\.json|composer\.lock|package\.json)$">
-    Order allow,deny
-    Deny from all
+<FilesMatch "^(schema\.sql|\.env|\.env\..*|\.git|composer\..*|package\..*|\.sql)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
 # Block access to database folder
-RedirectMatch 403 ^/database(/|$)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^\.env - [F,L]
+    RewriteRule ^database/ - [F,L]
+</IfModule>
 
 # Default Charset
 AddDefaultCharset UTF-8

@@ -54,23 +54,29 @@ define('RAZORPAY_KEY_ID', env('RAZORPAY_KEY_ID', ''));
 define('RAZORPAY_KEY_SECRET', env('RAZORPAY_KEY_SECRET', ''));
 define('RAZORPAY_MODE', env('RAZORPAY_MODE', 'test'));
 
-// Dynamic Base URL Detection
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$project_root_name = 'GamingCafe';
-
-if (php_sapi_name() === 'cli' || empty($_SERVER['HTTP_HOST'])) {
-    $base_path = '/' . $project_root_name;
+// Dynamic Base URL Detection (Auto-detects XAMPP subfolder or Live Root Hosting like InfinityFree/cPanel)
+$env_url = env('APP_URL');
+if (!empty($env_url)) {
+    define('BASE_URL', rtrim($env_url, '/') . '/');
 } else {
-    $script_dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
-    $pos = strpos($script_dir, '/' . $project_root_name);
-    if ($pos !== false) {
-        $base_path = substr($script_dir, 0, $pos + strlen('/' . $project_root_name));
-    } else {
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $project_root_name = 'GamingCafe';
+
+    if (php_sapi_name() === 'cli' || empty($_SERVER['HTTP_HOST'])) {
         $base_path = '/' . $project_root_name;
+    } else {
+        $script_dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        $pos = strpos($script_dir, '/' . $project_root_name);
+        if ($pos !== false) {
+            $base_path = substr($script_dir, 0, $pos + strlen('/' . $project_root_name));
+        } else {
+            // Live web hosting root (e.g. InfinityFree htdocs / cPanel public_html)
+            $base_path = ($script_dir === '/' || $script_dir === '.' || $script_dir === '') ? '' : $script_dir;
+        }
     }
+    define('BASE_URL', rtrim($protocol . $host . $base_path, '/') . '/');
 }
-define('BASE_URL', rtrim($protocol . $host . $base_path, '/') . '/');
 
 // Asset Paths
 define('ASSETS_URL', BASE_URL . 'assets/');
