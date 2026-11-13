@@ -193,9 +193,6 @@ GamingCafe/
 
 ## 6. Default Administrative Credentials
 
-- **Username:** `admin`
-- **Password:** `IroncladAdmin2026!`
-- **Access Level:** Super Admin (Owner)
 
 *(Note: Change credentials immediately in production via `admin/settings.php`.)*
 
